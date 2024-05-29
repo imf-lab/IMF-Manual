@@ -1,0 +1,48 @@
+\usepackage{tikz}
+
+\usetikzlibrary{positioning}
+\usetikzlibrary{arrows.meta}
+
+\tikzstyle{_uBox}    = [draw, font=\sffamily, minimum width=1.8cm, minimum height=.7cm]
+\tikzstyle{oClass}   = [_uBox, fill=green!10]
+\tikzstyle{oExt}     = [_uBox, fill=yellow!10, dashed, minimum width=1.2cm, minimum height=.5cm]
+
+\tikzstyle{_uCircle} = [draw, circle, font=\sffamily, radius=.1cm]
+\tikzstyle{oInd}     = [_uCircle, fill=gray!10]
+
+\tikzstyle{oRlab}    = [font=\scriptsize\sffamily,above,fill=white, fill opacity=.7, text opacity=1]
+
+\tikzstyle{oSpec}    = [-{Triangle[open, scale=1.7]}]
+\tikzstyle{oRelDir}  = [-Latex]
+\tikzstyle{oRel}     = [-]
+
+\tikzstyle{emph}     = [red]
+
+
+%%  patterns
+
+\newcommand{\tikzElement}{
+  \node[oClass]                                  (e) {Element};
+}
+
+\newcommand{\tikzElementsBasic}{
+  \tikzElement
+  \node[oClass, below left = 1cm and 2cm of e]   (b) {Block};
+  \node[oClass, below = of e]                    (t) {Terminal};
+  \node[oClass, below right = 1cm and 2cm of e]  (c) {Connector};
+  \draw[oSpec] (b) -- (e);
+  \draw[oSpec] (t) -- (e);
+  \draw[oSpec] (c) -- (e);
+}
+
+\newcommand{\tikzElementsAll}{
+  \tikzElementsBasic
+
+  \node[oClass, below left   = of t] (ot) {OutputTerminal};
+  \node[oClass, below        = of t] (it) {InputTerminal};
+  \node[oClass, below right  = of t] (bt) {BiTerminal};
+
+  \draw[oSpec] (it) -- (t);
+  \draw[oSpec] (ot) -- (t);
+  \draw[oSpec] (bt) -- (t);
+}

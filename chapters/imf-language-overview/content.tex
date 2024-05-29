@@ -1,0 +1,1371 @@
+
+
+This specification gives a formal description of the Information
+Modelling Framework (IMF) language.
+%
+Its purpose is to provide an abstract and implementation independent
+specification of the IMF language, and with that give an introduction
+to the language and provide a common basis for practical and
+theoretical applications of IMF, such as specifying logical
+formalizations, serialization formats, and software applications and
+services that use IMF.
+
+The specification is based on the developments of the following documents:
+\begin{itemize}
+\item \textbf{IMF Language: Logic Formalization}, which gives a
+  first-order logic formalization of the IMF language.\\
+  \url{https://gitlab.com/imf-lab/spec/imf-language-logic-formalisation}
+\item \textbf{IMF Language: Guidelines for Visualizing IMF Models},
+  which defines a graphical language for drawing IMF models with
+  nodes, edges and colours.\\
+  \url{https://gitlab.com/imf-lab/spec/imf-language-visualisation}
+\item \textbf{IMF Language: Semantic Technologies Implementation},
+  which specifies an implementation of the IMF language using the W3C
+  semantic technology recommendations OWL, SHACL and RDF.\\
+  \url{https://gitlab.com/imf-lab/spec/imf-ontology}
+\end{itemize}
+
+%\subsection{Scope}
+%\label{sec:scope}
+
+
+\subsection*{Notation}
+
+This document uses the following notation.
+
+\subsubsection*{Ontology}
+
+The IMF vocabulary is written using the following typing:
+\begin{itemize}
+\item Classes are written using \ow{UpperCamelCase} and appear as
+  unary predicates in examples.
+\item Relations are written using \ow{lowerCamelCase} and appear as
+  binary predicates in examples.
+\item Individuals are written using \ow{lowerCamelCase} and appear as
+  constants in examples.
+\end{itemize}
+
+
+\subsubsection*{Diagrams}
+
+The diagrams that illustrate how classes, relations and
+individuals in the IMF vocabulary are related are informative only
+(and not normative). They indicate subclass relationships between
+classes, membership relationships between individuals and classes, and
+the domain and range of relations.
+
+%\subsubsection{Visualisation}
+
+
+\section{Overview}
+
+
+The IMF language is split into the following main parts: ontology,
+models, types and templates. Closely related to the IMF language are also
+(object) identifiers. A high-level description of these parts
+are described below and informally displayed in
+\autoref{fig:imf-lang-parts}.
+
+\begin{figure}
+  \centering
+  \tikzstyle{lab}=[fill=white]
+  \tikzstyle{imf}=[fill=yellow!20]
+  \tikzstyle{imf2}=[fill=yellow!5]
+  \tikzstyle{oth}=[fill=gray!10]
+  \begin{tikzpicture}[
+    xscale=2.3,yscale=1.3,
+    ]
+    \sf
+
+    \node[imf](o)  at (-3.5, 0) {Ontology};
+    \node[imf](v)  at (-2,-1) {Vocabulary};
+    \node[imf](a)  at (-2, 1) {\{Axiom\}};
+
+    \node[draw,gray!15,fit=(o)(v)(a),inner sep=10pt] {};
+
+    \node[oth](i)   at (0 ,-3.5) {Instance};
+
+    \node[imf](te)   at (-2,-3.5) {Template};
+    \node[imf](ty)   at (-1,-2.25) {Type};
+    
+    \node[imf2](id) at (1.5 ,-1.75) {Object Identifier};
+
+    \node[oth](f)  at (0 , 0) {\{Fact\}};
+    \node[imf](m)  at (2 , 0) {Model};
+
+    \node[draw,gray!15,fit=(m)(f),inner sep=10pt] {};
+
+    \draw[-latex] (o) -> node[lab]{consists of} (a);
+    \draw[-latex] (o) -> node[lab]{consists of} (v);
+    \draw[-latex,dotted] (a) -> node[lab]{defines} (v);
+
+    \draw[-latex] (i) -> node[lab]{represents} (f);
+
+    \draw[-latex,dashed] (te) -> node[lab]{ref.} (v);
+    \draw[-latex,dashed] (ty) -> node[lab]{ref.} (v);
+    \draw[-latex,dashed] (te) -> node[lab]{ref.} (ty);
+
+    \draw[-latex,dotted] (i) -> node[lab]{instantiates} (te);
+    \draw[-latex,dotted] (i) -> node[lab]{arguments} (id);
+
+    \draw[-latex] (f) -> node[lab]{uses} (id);
+    \draw[-latex] (f) -> node[lab]{ref.} (v);
+    \draw[-latex] (f) -> node[lab]{ref.} (ty);
+
+    \draw[-latex] (m) -> node[lab]{consists of} (f);
+
+    \draw[-latex] (a) -> node[lab]{verifies} (f);
+
+  \end{tikzpicture}
+  \caption{The parts of the IMF language and how they are related.}
+  \label{fig:imf-lang-parts}
+\end{figure}
+
+\subsection{IMF Ontology}
+
+The ontology comprises 
+\begin{itemize}
+\item A vocabulary, i.e., a reserved set of terms, that is used to express
+  facts about the target domain.
+\item A set of rules over the vocabulary, called axioms, that
+  describe the intended use of the vocabulary and hence how the
+  vocabulary is used to express correct and meaningful facts.
+\end{itemize}
+
+The IMF ontology is described in \autoref{sec:ontology}.
+
+\begin{example}\label{ex:imf-ontology}
+  The IMF ontology contains vocabulary terms such as \ow{Block},
+  \ow{Terminal}, \ow{partOf} and \ow{connectedTo}, and axioms such as
+  ``A \ow{Terminal} can only be \ow{partOf} other \ow{Terminal}s'' and
+  ``Blocks are not Terminals'', which can be formalized as follows
+  with these logic formulas:
+\begin{align*}
+\forall x,y ( \ow{Terminal}(x) \land \ow{partOf}(x,y) &\rightarrow \ow{Terminal}(y))\\
+\forall x ( \ow{Block}(x) &\rightarrow \neg \ow{Terminal}(x))
+\end{align*}
+\end{example}
+
+\subsection{Identifiers}
+
+In the context of the IMF language specification, an object identifier
+is a name for an object or entity that is described using the IMF language.
+
+A goal of IMF is to be able to clearly identify distinct descriptions
+of assets, and to integrate data that is typically distributed across
+multiple systems and diagrams using multiple identifiers.
+
+%Identifiers are further described in \autoref{sec:identifiers}.
+
+\begin{example}
+  Examples of identifiers are tags, system identifiers and database keys.
+
+  In our simple formal examples, we use $a$, $b$,
+  $c$, $\ldots$ to represent identifiers.
+\end{example}
+
+\subsection{IMF Models}
+
+An IMF model is a language construct for grouping and organizing facts
+expressed using the IMF vocabulary, i.e., it is essentially just a set
+of facts, a dataset. A fact is expressed using the vocabulary and
+identifiers.
+
+%IMF models are further described in \autoref{sec:model}.
+
+\begin{example}
+  The following is an IMF model:\\
+  \begin{tabularx}{\textwidth}{@{}p{.6\textwidth}X}
+  {\begin{align*}
+    \{~&\ow{Block}(a), \ow{connectedTo}(a,e), \ow{Terminal}(e),\\
+      &\ow{Block}(b), \ow{connectedTo}(b,f), \ow{Terminal}(f), \\
+      &\ow{partOf}(b,a),\\
+      &\ow{partOf}(f,e)~ \}
+  \end{align*}}
+  &
+  \begin{tikzpicture}[baseline=1cm]
+    \node[block]    (a) at (0,0)  {a};
+    \node[terminal] (e) at (2,0) {e};
+    \node[block]    (b) at (0,-2)  {b};
+    \node[terminal] (f) at (2,-2)  {f};
+    \draw[connectedTo] (a) -- (e);
+    \draw[connectedTo] (b) -- (f);
+    \draw[containedIn]      (b) -- (a);
+    \draw[containedIn]      (f) -- (e);
+  \end{tikzpicture}
+  \end{tabularx}
+  
+The model states that $a$ and $b$ are \ow{Block}s, and $e$ and $f$ are
+\ow{Terminal}s.
+$a$ is \ow{connectedTo} $e$,
+$b$ is \ow{connectedTo} $f$,
+$b$ is \ow{partOf} $a$,
+and
+$f$ is \ow{partOf} $e$.
+This model complies with the axioms in \autoref{ex:imf-ontology}.
+The model is visualized using the graphics listed in \autoref{fig:graphics-all}.
+\end{example}
+
+
+\subsection{IMF Types and IMF Templates}
+
+Informally, \emph{types} are used by SMEs to express typical configurations of model elements, in order to support standardization, reuse, and consistency and uniformity of information models. A type will typically represent a concept that is standard throughout an engineering discipline.
+
+A \emph{template} is used to consistently create a specific configuration of model elements, in order to simplify model construction and maintenance. The configuration that a template represents need not---but can---be standard, and may be created to support modelling consistency and uniformity within only a specific engineering project.
+
+Hence, types and templates are similar, but they differ in their scope; types are expected to serve a wider use than templates, while templates will on the other hand typically represent more detailed configurations, often orchestrating and configuring types for particular modelling use cases.
+%
+Instantiating types and templates from carefully curated libraries is a primary way of efficiently creating and maintaining information models of high quality.
+
+This informal understanding of types and templates gives rise to the following more formal definition of IMF types and IMF templates.
+
+An \emph{IMF type} is represented by an expression over the IMF
+vocabulary that defines a class of all the objects that adhere to the
+configuration specified by the IMF Type. These objects are called
+instances of the type or type instances.
+%
+An \emph{IMF template} is a language construct for representing reusable
+modelling patterns over the IMF vocabulary. A template instance is a
+replica of the template's modelling pattern that follows the
+conditions that may be specified by the template.  A template instance
+represents a set of facts over the vocabulary. Hence, a template
+instance represents a small IMF model.
+
+There are hence clear similarities between an IMF type and an IMF
+template.
+The difference is that
+an IMF type \emph{describes} a class of objects using the IMF vocabulary,
+while
+an IMF template is used to \emph{generate} a set of facts over the IMF vocabulary.
+An IMF Template may refer to an IMF Type and hence
+generate facts that are instances of IMF Types.
+
+\begin{example}\label{ex:Block-with-Terminal-Type}
+  A very simple (and artificial) IMF type is \ow{Block-with-Terminal-Type}:
+  \begin{align*}
+    \ow{Block-with-Terminal-Type}(x) \rightarrow  ( \ow{Block}(x) \land \exists y \ow{Terminal}(y) \land \ow{connectedTo}(x,y) )
+  \end{align*}
+  This IMF Type specifies the class of all \ow{Block}s that have a \ow{Terminal}.
+\end{example}
+
+\begin{example}
+  A very simple IMF template is \ow{Block-with-Terminal-Template}:
+  \begin{align*}
+    \ow{Block-with-Terminal-Template}(x,y) \mapsto \{ \ow{Block}(x), \ow{Terminal}(y), \ow{connectedTo}(x,y) \}
+  \end{align*}
+  The $x$ and $y$ are the parameters of the template, and it
+  represents the pattern of a \ow{Block} with a \ow{Terminal} connected
+  to it.
+
+  An instance of the template,
+  $\ow{Block-with-Terminal-Template}(a,b)$, expands to the model:
+  \begin{align*}
+    %\ow{Block-with-Terminal}(a,b) \mapsto
+    \{ \ow{Block}(a), \ow{Terminal}(b), \ow{connectedTo}(a,b) \}
+  \end{align*}
+  Note that the object $a$ is an instance of the IMF type \ow{Block-with-Terminal-Type} from \autoref{ex:Block-with-Terminal-Type}.
+\end{example}
+
+
+
+% \subsection{Example}
+
+% @@TODO:
+%  %
+% Present a complete example that can act as a running example for the
+% document?
+
+% \section{Principles}
+
+% @TODO
+
+% The IMF language is designed to be used as a [take text from
+% principles doc]
+
+% The idea is that one system area domain should not result
+% in multiple different IMF models.
+
+% The IMF language designed according to the following principles:
+% \begin{itemize}
+% \item simple to use
+% \item \ldots{}
+% \end{itemize}
+
+% As a consequence, the IMF language is kept deliberately small in size
+% and contains a limited number of modelling constructs that (are ment
+% to) describe systems along orthogonal dimensions. 
+
+
+\section{Ontology}
+\label{sec:ontology}
+
+\subsection{Overview}
+
+A vocabulary is a reserved set of terms which is split into
+\emph{classes}, \emph{relations} and \emph{individuals}.
+
+\input{imf-language-visualisation/figure/all-graphics}
+
+\subsubsection{Classes}
+
+The single top-most class in the IMF vocabulary's class hierarchy is \ow{Entity};
+everything is a \ow{Entity}.
+\ow{Entity} is a very generic concept
+%, and should not be directly instantiated,
+%rather should instantiate one of its subclasses.
+%\ow{Entity}
+that is used by the ontology to state generic axioms that hold
+for all objects described by the ontology.
+\ow{Entity} should not be directly instantiated, rather instantiate an appropriate subclass of \ow{Entity}.
+
+
+
+\subsubsection{Individuals}
+\label{sec:individuals}
+
+The ontology contains a limited number of individuals that represent
+reserved words in the vocabulary, such as names for \ow{Aspect}s.
+In this specification these individuals are presented as part of the presentation of the main class they are member of.
+
+
+\subsubsection{Relations}
+
+All relations are binary, i.e., all relationships relate two objects. As a
+high-level and informal categorization of relations, we distinguish
+between:
+
+\begin{itemize}
+\item \emph{Object} and \emph{datatype} relations. Object relations
+  relate two objects, while datatype relations associate a
+  data value, such as a string, a number or a date, to an object.
+
+  % . This distinction is the same as for OWL's ObjectProperty and
+  % DatatypeProperty [TODO cite]
+\end{itemize}
+
+For object relations the categorization also includes:
+
+\begin{itemize}
+\item \emph{Hierarchical} vs. \emph{associative} relations. Hierarchical relations
+specify an ordering or ranking, while associative relations (or
+non-hierarchical relations) do not specify a clear ordering and
+often relate elements of similar rank (as specified by a
+hierarchical relation).
+\item \emph{Internal} vs. \emph{external} relations. Internal relations are defined
+with a domain and range that is specified by IMF classes, while
+\emph{external relations} do not and will usually relate to objects from
+external reference data libraries.
+\item \emph{Logical} vs. \emph{annotation} relations. Logical relations have formal
+logical meaning which must be considered by logical reasoners, while
+annotations are typically used for metadata such as creation date
+and may be ignored by logical reasoners.
+% This distinction is the same as for OWL's ObjectProperty and
+% DatatypeProperty on the one hand, and AnnotationProperty on the
+% other hand [cite].
+\end{itemize}
+
+%@TODO "This is not covered in this specification" \textbf{Metadata} are used for
+%annotations, e.g., names, textual definitions, versioning and
+%provenance data.
+
+Unless otherwise noted, all relations are object type, associative,
+internal and logical.
+
+
+\subsection{Generic relations}
+
+Membership and equality relationships are generic
+relations that can be used to describe and reuse abstractions and
+categorizations. They are applicable to all \ow{Entity}-s.
+
+
+\subsubsection{Equality}
+
+\ow{sameAs} is a relation between
+\ow{Entity}-s, such that $\ow{sameAs}(a,b)$ expresses that
+the \ow{Entity}-s $a$ and $b$ are equal,
+i.e., $a$ and $b$ are different names/identifiers for the same $\ow{Entity}$.
+
+\begin{axioms}~
+  \begin{enumerate}[resume=axioms,{label=(\arabic*)}]
+  \item \ow{sameAs} is a relation between \ow{Entity}-s.
+  \item \ow{sameAs} is reflexive, symmetric, and transitive.
+  \end{enumerate}
+\end{axioms}
+
+\subsubsection{Membership}
+\label{sec:membership}
+
+\ow{memberOf} is a relation between \ow{Entity}-s,
+such that $\ow{memberOf}(a,b)$ expresses that the \ow{Entity} $a$ is a member of the \ow{Entity} $b$,
+and hence that $b$ is a collection or group for $a$.
+The inverse relation of \ow{memberOf} is \ow{hasMember}.
+
+\begin{axioms}~
+  \begin{enumerate}[resume=axioms,{label=(\arabic*)}]
+  \item \ow{memberOf} is a relation between \ow{Entity}-s.
+  \item \ow{hasMember} is the inverse of \ow{memberOf}.
+  \end{enumerate}
+\end{axioms}
+
+\subsection{\ow{InformationArtefact}s}
+
+\ow{Entity} has a single subclass \ow{InformationArtefact} that is the common class for the core categories of the ontology:
+\ow{Element}, \ow{Descriptor} and \ow{InformationModel} (\autoref{uml-toplevel}).
+These subclasses are pairwise disjoint.
+
+\ow{Element} (\autoref{sec:Elements}) is the core class of the ontology. All classes and
+relations in the ontology exist to describe \ow{Element}s---either directly or indirectly.
+
+A \ow{Descriptor} is an \ow{InformationArtefact} that serves to describe or identify a feature of an \ow{Entity}.
+
+A \ow{reference} is a generic relation that relates a resource to a \ow{Descriptor}.
+
+\ow{Descriptor}s are associated with other \ow{Descriptor}s with the reference relation \ow{hasCharacteristic}.
+
+\begin{figure}
+  \centering
+  \input{figure/ontology-toplevel}
+  \caption{\label{uml-toplevel}
+    \ow{InformationArtefact} and subclasses.}
+\end{figure}
+
+
+\begin{axioms}
+  ~
+  \begin{enumerate}[series=axioms,{label=(\arabic*)}]
+  \item \ow{InformationArtefact} is a subclass of \ow{Entity}.
+  \item \ow{Element}, \ow{Descriptor}, and \ow{InformationModel} are subclasses of \ow{InformationArtefact}.
+  \item \ow{Element}, \ow{Descriptor}, and \ow{InformationModel} are pairwise disjoint.
+  \item \ow{reference} is a relation to a \ow{Descriptor}.
+  \item \ow{hasCharacteristic} is a subrelation of \ow{reference} that relates \ow{Descriptor}s.
+  \end{enumerate}
+\end{axioms}
+
+\subsection{\ow{InformationModel}}
+
+\ow{Element}s and \ow{Descriptor}s may be collected into and organized by \ow{InformationModel}s,
+hence an \ow{InformationModel} represents a set of such \ow{InformationArtefact}s.
+\ow{Element}s and \ow{Descriptor} are associcated with an \ow{InformationModel} using the \ow{memberOf}/\ow{hasMember} relations.
+
+
+
+\subsection{Elements}
+\label{sec:Elements}
+
+\autoref{uml-elements} displays the class \ow{Element} and its subclasses.
+\autoref{fig:graphics-node-shapes} shows the graphical language for describing \ow{Element}s.
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \tikzElementsAll
+    \draw[oRelDir] (e) to [out=60 ,in=10 ,looseness=5] node[oRlab] {elementRelation}   (e);
+  \end{tikzpicture}
+  \caption{\label{uml-elements}
+    \ow{Element} and its subclasses.}
+\end{figure}
+
+\input{imf-language-visualisation/figure/all-nodes}
+
+\subsubsection{\ow{Element}}
+
+An \ow{Element} represents the specification of an asset. All assets
+specifications are represented by an \ow{Element}.
+%
+An \ow{Element} is described through its relations (\autoref{sec:relations}) to other \ow{Element}s,
+%
+its \ow{Aspect} (\autoref{sec:aspect}),
+%
+%% its optional \ow{Context} (\autoref{sec:contexts}),
+%
+and it may be assigned \ow{Attribute}s (\autoref{sec:attributes}).
+%
+
+An \ow{Element} is either a \ow{Block}, a \ow{Connector} or a \ow{Terminal}.
+Individuals rarely instantiate the class \ow{Element} directly, rather
+they are stated to be an instance of a subclass of
+\ow{Element}. (\ow{Element} can be considered an ``abstract class''.)
+
+
+
+The permissive relationships for an \ow{Element} are controlled by its
+type of subclass, and its \ow{Aspect}.
+% ,and \ow{Context}.
+
+An \ow{elementRelation} is a generic relation that relates \ow{Element}s.
+
+\begin{axioms}
+  ~
+  \begin{enumerate}[resume=axioms,{label=(\arabic*)}]
+  \item An \ow{Element} is either a \ow{Block}, a \ow{Connector}, or a \ow{Terminal}. 
+  \item \ow{Block}, \ow{Connector}, and \ow{Terminal} are pairwise disjoint.
+  \item \ow{elementRelation} is a relation between \ow{Element}s.
+  \end{enumerate}
+\end{axioms}
+
+\subsubsection{\ow{Block}}
+
+A \ow{Block} represents an abstraction of any entity at any
+abstraction level. A \ow{Block} also represents a boundary that
+separates what is internal and external to the
+\ow{Block}. \ow{Element}s that are part of the \ow{Block} are internal
+to the \ow{Block} and are not directly accessible to \ow{Element}s
+outside (the boundary of) the \ow{Block}.
+When a \ow{Block} represents a system, it can be natural to
+consider the \ow{Block} as a processing black box that transforms input
+to output, where the transformation process is detailed by the internals
+of the \ow{Block}.
+
+% \begin{example}
+%   @@TODO?
+
+%   Block represents something of interest to the SME by setting the
+%   boundaries of anything which is convenient to treat as an
+%   entity. This could be a whole industry plant, a pump system, or a
+%   small location of interest.
+% \end{example}
+
+
+\subsubsection{\ow{Connector}}
+
+A \ow{Connector} represents a topological connection between two
+\ow{Block}s, and it will specify conditions on this connection, such
+as the medium that is transferred between the \ow{Block}s.
+
+A \ow{Connector} can be considered as a \ow{Block} with infinitely small
+boundary, i.e., a \ow{Block} where there is no transformation of
+the input to the output at the current abstraction level of the
+\ow{Connector}. A \ow{Connector} may be further described by its
+parts.
+
+\subsubsection{\ow{Terminal}}
+
+A \ow{Terminal} represents a point on a \ow{Block}'s boundary where
+medium may pass, and it will specify conditions on the medium that may
+pass through it.
+%
+A \ow{Terminal} describes the permissible input and/or input of
+a \ow{Block}.
+%
+Any interaction with a \ow{Block} goes through a \ow{Terminal} of the
+\ow{Block}.
+
+A \ow{Terminal} depends on a \ow{Block}, hence a \ow{Terminal} cannot
+exist without a \ow{Block}.
+
+
+\ow{Block}s may interact by transferring media between them (\autoref{sec:media-transfer}).
+%
+A \ow{Terminal} may refer to \ow{direction} that specifies if the
+\ow{Terminal} is set up to send or receive media.
+%
+A \ow{Terminal} that is specified to only receive input is called an \ow{InputTerminal}.
+A \ow{Terminal} that is specified to only send output is called an \ow{OutputTerminal}.
+A \ow{Terminal} that may both receive input and give output is called a \ow{BiTerminal}.
+
+\begin{axioms}~
+  \begin{enumerate}[resume=axioms,{label=(\arabic*)}]
+  \item \ow{direction} is a subrelation of \ow{reference} that is functional relation and associates a \ow{Terminal} to a
+    transfer direction.
+  \item An \ow{InputTerminal} is a \ow{Terminal} with \ow{direction} \ow{input}.
+  \item An \ow{OutputTerminal} is a \ow{Terminal} with \ow{direction} \ow{output}.
+  \item A \ow{BiTerminal} is a \ow{Terminal} with \ow{direction} \ow{bidirectional}.
+  \end{enumerate}
+\end{axioms}
+
+\subsubsection{Classifiers}
+\label{sec:classifiers}
+
+\ow{classifier} is a \ow{reference} from an \ow{Element},
+such that $\ow{classifier}(a,b)$ expresses that
+the \ow{Element} $a$ is classified by the \ow{Descriptor} $b$.
+%
+The relation is typically used to categorize \ow{Element}s according to
+identifiers from standard reference data libraries or fixed
+enumerations for the purpose of connecting to and reusing well-known and shared
+identifiers and definitions.
+
+Subrelations of \ow{classifier}
+define for more specific classification relations.
+We distinguish between
+\ow{primaryClassifier}s that assign \emph{essential} descriptions or features to \ow{Element}s, and
+\ow{auxClassifier}s (auxiliary) that assign \emph{inessential} descriptions or features to \ow{Element}s.
+
+An \ow{Element} should have at least one \ow{primaryClassifier} that
+identifies the logically necessary types of an \ow{Element}.
+%
+Additional classifiers of \ow{Element}s may be assigned using
+\ow{auxClassifier}.
+
+\begin{axioms}~
+  \begin{enumerate}[resume=axioms,{label=(\arabic*)}]
+  \item \ow{classifier} is a subrelation of \ow{reference} that relates an \ow{Element} to a \ow{Descriptor}.
+  \item \ow{primaryClassifier} and \ow{auxClassifier} are subrelations of
+    \ow{classifier}.
+  \end{enumerate}
+\end{axioms}
+
+
+
+\subsection{Aspects}
+\label{sec:aspect}
+
+\ow{Element}s can be described from a specific point of view or
+aspect, in the IMF language this is represented by \ow{Aspect}s.
+%
+An \ow{Aspect} is a \ow{Descriptor} specified by
+one \ow{Modality},
+one \ow{InformationDomain},
+and one optional \ow{Interest}---all of which are also \ow{Descriptor}s.
+
+
+
+\begin{figure}
+\centering
+\input{./figure/ontology-aspect}
+\caption{\label{uml-aspect}
+\ow{Aspect}.}
+\end{figure}
+
+
+\ow{Modality} specifies the mode of existence of what is described.
+There are two predefined \ow{Modality}-s: \ow{intended} and \ow{actual}.
+
+\ow{Interest} specifies the modelling interest or context from which the
+\ow{Element} is described. There are two predefined \ow{Interest}s:
+\ow{projectLifecycle} and \ow{productLifecycle}
+
+\ow{Aspect}s are associated with an \ow{InformationDomain} that
+specifies what type of entities are in described by the \ow{Aspect}.
+There are three predefined \ow{InformationDomain}s: \ow{activity}, \ow{implementation} and \ow{space}.
+
+The various combinations of \ow{Modality}, \ow{InformationDomain}
+and \ow{Interest} give rise to different \ow{Aspect}s;
+these are listed in \autoref{fig:aspects}.
+
+\begin{figure}
+  \centering
+  \begin{tabular}{llll}
+    \ow{Modality} & \ow{Interest} & \ow{EntityType}      & \ow{Aspect}  \\ \hline
+    \ow{intended} &               & \ow{activity}        & \ow{intendedActivity}       (\ow{functionAspect}) \\
+    \ow{intended} &               & \ow{space}           & \ow{intendedSpace}          (\ow{locationAspect}) \\
+    \ow{intended} &               & \ow{implementation}  & \ow{intendedImplementation} (\ow{productAspect}) \\
+    \ow{actual}   &               & \ow{implementation}  & \ow{actualImplementation}   (\ow{installedAspect}) \\
+    
+    \ow{intended} & \ow{projectLifecycle} & \ow{activity}        & \ow{intendedProjectActivity} \\
+    \ow{intended} & \ow{projectLifecycle} & \ow{space}           & \ow{intendedProjectSpace}    \\
+    \ow{intended} & \ow{projectLifecycle} & \ow{implementation}  & \ow{intendedProjectImplementation} \\
+
+    \ow{intended} & \ow{productLifecycle} & \ow{activity}        & \ow{intendedProductActivity} \\
+    \ow{intended} & \ow{productLifecycle} & \ow{space}           & \ow{intendedProductSpace}    \\
+    \ow{intended} & \ow{productLifecycle} & \ow{implementation}  & \ow{intendedProductImplementation}
+  \end{tabular}
+  \caption{Aspects}
+  \label{fig:aspects}
+\end{figure}
+
+
+\input{imf-language-visualisation/figure/all-colours}
+
+\begin{axioms}~
+  \begin{enumerate}[resume=axioms,{label=(\arabic*)}]
+
+  \item \ow{Aspect}, \ow{Modality}, \ow{Interest} and \ow{InformationDomain} are subclasses of \ow{Descriptor}.
+    
+  \item \ow{intended} and \ow{actual} are \ow{Modality}-s.
+  \item \ow{projectLifecycle} and \ow{productLifecycle} are \ow{Interest}s.
+  \item \ow{activity}, \ow{space} and \ow{implementation} are \ow{InformationDomain}s.
+
+  \item An \ow{Aspect} is associated by one \ow{Modality}, optionally one \ow{Interest} and one \ow{InformationDomain} via the \ow{hasCharacteristic} relation.
+  \item
+    \ow{intendedActivity},
+    \ow{intendedSpace},
+    \ow{intendedImplementation},
+    \ow{intendedProjectActivity},    
+    \ow{intendedProjectSpace},   
+    \ow{intendedProjectImplementation},
+    \ow{intendedProductActivity},
+    \ow{intendedProductSpace}
+    and
+    \ow{intendedProductImplementation}
+    are \ow{Aspect}s and are specified as in \autoref{fig:aspects}.
+  \end{enumerate}
+\end{axioms}
+
+
+
+
+\subsection{Aspect Elements}
+\label{sec:aspect-elements}
+
+An \ow{Element} may have at most one \ow{Aspect}.
+%
+An \ow{Element} that has an \ow{Aspect} is called an
+\ow{AspectElement}.
+
+It is convenient to be able to identify \ow{Element}s that carry
+descriptions that are not of a single \ow{Aspect} and where the
+\ow{Element}'s description is not analysed into separate
+\ow{Aspect}s. Such \ow{Element}s are called \ow{NoAspectElement}s and
+have explicitly no \ow{Aspect}.
+
+%Technically this may also be stated by
+%assigning the ``no value'' \ow{none} as its \ow{Aspect}.
+
+Note that an \ow{Element} where its \ow{Aspect} is not known is not a
+\ow{NoAspectElement}. Such an \ow{Element} is neither an
+\ow{AspectElement} nor a \ow{NoAspectElement}, simply an \ow{Element}.
+
+\ow{Aspect}s are used to control the permissive relationships an
+\ow{Element} may have, in part by way of the  relations
+\ow{intraAspectRelation} and \ow{interAspectRelation}.
+%
+An \ow{intraAspectRelation} relates \ow{Element}s that have the same
+value assigned as its \ow{Aspect}, while an \ow{interAspectRelation}
+relates \ow{Element}s that have different values.
+
+%In both cases the
+%value \ow{none} is included as a possible value for \ow{Aspect}.
+
+\input{imf-language-visualisation/figure/ex-coloured-blocks}
+
+
+\begin{figure}
+\centering
+\input{./figure/ontology-aspectElement}
+\caption{\label{uml-aspectelement}
+\ow{Aspect}s and \ow{Element}s.}
+\end{figure}
+
+\begin{axioms}~
+  \begin{enumerate}[resume=axioms,{label=(\arabic*)}]
+  \item \ow{hasAspect} is a subrelation of \ow{reference} that is a functional relation from \ow{Element} to
+    \ow{Aspect}.
+    %plus the value \ow{none}.
+  \item An \ow{AspectElement} is an \ow{Element} with an \ow{Aspect}
+    %(and not \ow{none})
+    assigned to it by the relation \ow{hasAspect}.
+  \item A \ow{NoAspectElement} is an \ow{Element} with
+    % \ow{none} assigned to it by the relation \ow{hasAspect}
+    no \ow{Aspect}.
+
+  \item \ow{intraAspectRelation} and \ow{interAspectRelation} are subrelations of \ow{elementRelation}.
+    
+  \item If two \ow{Element}s are related by an
+    \ow{intraAspectRelation} they must either share the same \ow{Aspect} or have no aspect.
+
+  \item If two \ow{Element}s are related by an \ow{interAspectRelation} they cannot share the same \ow{Aspect}.
+
+  \end{enumerate}
+\end{axioms}
+
+
+\subsection{Relations}
+\label{sec:relations}
+
+The IMF ontology contains a spesific set of relations for describing \ow{Element}s. The
+main relational structures are specialization, topology, partonomy,
+requirement--solution relationship, and relations between
+\ow{AspectElement} that describe different aspects of the same entity.
+All these relations are subrelations of \ow{elementRelation}, either directly or indirectly.
+
+\autoref{fig:graphics-all-edges} shows the edges available for visualizing
+relationships.
+
+\input{imf-language-visualisation/figure/all-relations}
+
+
+\subsubsection{Specialization}
+
+\ow{specializationOf} is a hierarchical relation and a subrelation of \ow{intraAspectRelation},
+such that $\ow{specializationOf}(a,b)$ expresses that
+the \ow{Element} $a$ is a specialization of the \ow{Element} $b$.  If
+$a$ is a \ow{specializationOf} $b$, then $a$ inherits \emph{all} the
+facts expressed for $b$. 
+
+\ow{specializationOf} is used when specialized \ow{Element}s are
+created from one or more generic \ow{Element}s,
+%
+or if the shared facts for multiple \ow{Element}s are to be refactored
+into new generalized \ow{Element}(s). Using \ow{specializationOf} avoids
+repetition of facts and makes models more compact, possibly at the
+expense of added cognitive complexity to models.
+
+\begin{axioms}~
+  \begin{enumerate}[resume=axioms,{label=(\arabic*)}]
+  \item \ow{specializationOf} is subrelation of \ow{intraAspectRelation}.
+  \item \ow{specializationOf} is reflexive, anti-symmetric, and transitive.
+  \item If $a$ is a \ow{specializationOf} $b$, then $a$ inherits all
+    facts expressed for $b$.
+  \item \ow{specializes} is the inverse relation of \ow{specializationOf}.
+  \end{enumerate}
+\end{axioms}
+
+
+
+
+\subsubsection{Topology}
+\label{sec:topology}
+
+Topological relations describe how \ow{Element}s are
+connected and interact.
+Connected \ow{Element}s are described on a similar
+level of abstraction.
+
+The defining topology relation is \ow{connectedTo}.
+%
+\ow{connectedTo} is an associative relation between \ow{Element}s,
+such that $\ow{connectedTo}(a,b)$ expresses that $a$ is topologically
+connected to $b$.
+%
+\ow{adjacentTo} is a subrelation of \ow{connectedTo}, such
+that $\ow{adjacentTo}(a,b)$ expresses that $a$ is directly
+topologically connected to $b$. That means that there is no element
+topologically ``in between'' $a$ and $b$.
+
+Two ``shorthand'' relations are also defined:
+%
+\ow{hasTerminal} is a subrelation of \ow{adjacentTo} between \ow{Block}s and \ow{Terminal}s, while
+%
+\ow{hasConnector} is a subrelation of \ow{adjacentTo} between \ow{Terminal}s and \ow{Connector}s.
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}[baseline=1cm, every node/.style={unknown}]
+    \node[block]       (b1)   at (0,0)  {$a$};
+    \draw[connectedTo] (b1) -- ++(-2,-.7) node[terminal] (b1it1) {};
+    \draw[connectedTo] (b1) -- ++(-2, .7) node[terminal] (b1it2) {};
+    \draw[dotted] (b1it1) -- (b1it2);
+    \draw[connectedTo] (b1) -- ++( 2,-.7) node[terminal] (b1ot1) {};
+    \draw[connectedTo] (b1) -- ++( 2, .7) node[terminal] (b1ot2) {};
+    \draw[dotted] (b1ot1) -- (b1ot2);
+    
+    \node[block]       (b2)   at (8,2)  {};
+    \draw[connectedTo] (b2) -- ++(-2,-.7) node[terminal] (b2it1) {};
+    \draw[connectedTo] (b2) -- ++(-2, .7) node[terminal] (b2it2) {};
+    \draw[dotted] (b2it1) -- (b2it2);
+    \draw[connectedTo] (b2) -- ++( 2,-.7) node[terminal] (b2ot1) {};
+    \draw[connectedTo] (b2) -- ++( 2, .7) node[terminal] (b2ot2) {};
+    \draw[dotted] (b2ot1) -- (b2ot2);
+
+    \node[block]       (b3)   at (8,-2)  {$b$};
+    \draw[connectedTo] (b3) -- ++(-2,-.7) node[terminal] (b3it1) {};
+    \draw[connectedTo] (b3) -- ++(-2, .7) node[terminal] (b3it2) {};
+    \draw[dotted] (b3it1) -- (b3it2);
+    \draw[connectedTo] (b3) -- ++( 2,-.7) node[terminal] (b3ot1) {};
+    \draw[connectedTo] (b3) -- ++( 2, .7) node[terminal] (b3ot2) {};
+    \draw[dotted] (b3ot1) -- (b3ot2);
+    
+    \node[connector]    (c1) at (4,-.9)  {};
+    \node[connector]    (c2) at (4, .9)  {};
+
+    \draw[connectedTo] (b1ot1) -- (c1) -- (b3it2);
+    \draw[connectedTo] (b1ot2) -- (c2) -- (b2it1);
+
+    \node[fit=(b1it1)(b1ot2),draw, inner sep=10pt,blue!30,fill=none] {};
+    %\node[fit=(b2it1)(b2ot2),draw, inner sep=10pt,blue!30] {};
+    \node[fit=(b3it1)(b3ot2),draw, inner sep=10pt,blue!30,fill=none] {};
+
+    \node[fit=(b1ot1)(c1)(b3it2),draw, inner sep=5pt,green!40,fill=none] {};
+    %\node[fit=(b1ot2)(c2)(b2it1),draw, inner sep=5pt,green!40] {};
+
+    \draw[connectedTo,pink,very thick] (b1) |- node[fill=none,above,color=black]{$p$} (c2);
+    \draw[connectedTo,pink,very thick] (b1) |- node[fill=none,below,color=black]{$q$} (b3);
+  \end{tikzpicture}
+
+  \caption{Pattern for topologically connected \ow{Element}s:
+    % 
+    \ow{Block}s are through their \ow{Terminals} (boxed in blue)
+    connected via \ow{Connector}s (boxed in green).
+    %
+    A \ow{connectedTo} relationship between a \ow{Block} and a \ow{Connector} (the edge labelled $p$) entails the existence of a \ow{Terminal} between them.
+    %
+    A \ow{connectedTo} relationship between two \ow{Block}s (the edge
+    labelled $p$) entails the existence of a pattern of the form of
+    the green boxed pattern between them.}
+  \label{fig:topology-pattern}
+\end{figure}
+
+The difference between these topological relations is that
+\ow{connectedTo} allows for expressing the topology of \ow{Element}s
+between \emph{any} kind of \ow{Element}s, e.g., but not limited to,
+two \ow{Block}s, or a \ow{Block} and a \ow{Connector}, while the use
+of \ow{adjacentTo} and its subrelations is more restricted.
+However, a \ow{connectedTo} relationship
+is required to be 
+realizable by a
+chain of \ow{adjacentTo} relationships.
+%
+This is to force the following reoccurring pattern in all topological chains of
+\ow{Element}s:
+$$\ldots {}
+\rightarrow \ow{Block}
+\rightarrow \ow{Terminal}
+\rightarrow \ow{Connector}
+\rightarrow \ow{Terminal}
+\rightarrow \ow{Block}
+\rightarrow {} \ldots$$
+%
+Note however that each \ow{Element} in the chain is not necessarily explicitly
+expressed, but may be left implicit
+%, but all \ow{Element}s do need to exist 
+%
+(\autoref{fig:topology-pattern}).
+%
+This can be useful in the case of representing incomplete information
+which may occur early
+in the modelling process or when
+the information to be 
+modelled is at a very high
+abstraction level where, e.g., the conditions for
+\ow{Terminal}s and \ow{Connector}s are not known, but it is clear
+which \ow{Block}s are connected.
+
+
+\begin{figure}
+\centering
+\input{./figure/ontology-topology}
+\caption{\label{uml-topology} Topology relations.}
+\end{figure}
+
+
+
+The following axioms are defined for topological relations (\autoref{uml-topology}):
+\begin{axioms}~
+  \begin{enumerate}[resume=axioms,{label=(\arabic*)}]
+  \item \ow{connectedTo} is an \ow{intraAspectRelation}.
+  \item \ow{adjacentTo} is a subrelation of \ow{connectedTo}. 
+  \item \ow{connectedTo} and \ow{adjacentTo} are symmetric.
+  \item \ow{hasTerminal} is a subrelation of
+    \ow{adjacentTo} that associates a \ow{Block} with its
+    \ow{Terminal}s.
+  \item \ow{connectedThrough} is a relation from a \ow{Block} to a
+    \ow{Connector} such that the relation is equal to the composition
+    of \ow{hasTerminal} and \ow{hasConnector}.
+  \item \ow{hasConnector} is a subrelation of \ow{adjacentTo}
+    that associates a \ow{Terminal} to its \ow{Connector}s.
+  \item \ow{Block}s and \ow{Connector}s may be \ow{adjacentTo} to only \ow{Terminal}s.
+  \item \ow{Element}s may be \ow{connectedTo} any number of \ow{Element}s.
+  \item A \ow{Block} may be \ow{adjacentTo} any number of \ow{Terminal}s.
+  \item A \ow{Terminal} must be \ow{adjacentTo}  one \ow{Block}.
+    % \item A \ow{Terminal} may be \ow{adjacentTo} not more than one \ow{Connector}.
+  \item A \ow{Connector} must be \ow{adjacentTo} exactly two \ow{Terminal}s. 
+  \item \label{ax:topology-realisable}A \ow{connectedTo} relationship must be realizable by a sequence
+      of \ow{adjacentTo} relationships.
+  \end{enumerate}
+\end{axioms}
+
+
+
+\subsubsection{Partonomy}
+
+Partonomy relations relate \ow{Element}s at different levels of
+abstraction.
+%
+An \ow{Element} can be described by relating it to its \emph{parts},
+which are \ow{Elements} described at a lower level of abstraction, and
+by it relating to the \emph{whole} it is part of, which is an
+\ow{Element} at a higher level of abstraction.
+%
+This recursive breakdown structure allows \ow{Element}s to be
+described at incremental finer---or coarser, level of detail.
+
+The defining partonomy relation is \ow{partOf}.
+%
+\ow{partOf} is a hierarchical relation between \ow{Element}s, such
+that $\ow{partOf}(a,b)$ expresses that $a$ is part of $b$.  In such a
+relationship, we call $a$ ``the part'' or ``child'', while $b$ is
+called ``the whole'' or ``parent''.
+%
+Any \ow{Element} is a \ow{partOf} at most one other \ow{Element};
+the \ow{partOf} hierarchy forms a tree-structured breakdown.
+%
+\ow{hasPart} is the inverse relation of \ow{partOf}.
+
+\ow{containedIn} is the transitive closure of \ow{partOf}, and
+\ow{contains} is the transitive closure of \ow{containedIn}.
+
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}[baseline=1cm, every node/.style={unknown}]
+
+    \node[block]       (b1)   at (0,0)  {$b$};
+    \draw[connectedTo] (b1) -- ++(-2,-.7) node[terminal] (b1it1) {};
+    \draw[connectedTo] (b1) -- ++(-2, .7) node[terminal] (b1it2) {};
+    \draw[dotted] (b1it1) -- (b1it2);
+    \draw[connectedTo] (b1) -- ++( 2,-.7) node[terminal] (b1ot1) {};
+    \draw[connectedTo] (b1) -- ++( 2, .7) node[terminal] (b1ot2) {};
+    \draw[dotted] (b1ot1) -- (b1ot2);
+
+    %% parts step 1
+    
+    \node[block]       (b2)   at (-5,-3)  {};
+    \draw[connectedTo] (b2) -- ++(-2,-.7) node[terminal] (b2it1) {};
+    \draw[connectedTo] (b2) -- ++(-2, .7) node[terminal] (b2it2) {};
+    \draw[dotted] (b2it1) -- (b2it2);
+    \draw[connectedTo] (b2) -- ++( 2,-.7) node[terminal] (b2ot1) {};
+    \draw[connectedTo] (b2) -- ++( 2, .7) node[terminal] (b2ot2) {};
+    \draw[dotted] (b2ot1) -- (b2ot2);
+
+    \draw[connectedTo] (b2ot1) -- ++(2, 0) node[connector] (c1)  {};
+    \draw[connectedTo] (b2ot2) -- ++(2, 0) node[connector] (c2)  {};
+
+    \node[block]       (b3)   at (5,-3)  {};
+    \draw[connectedTo] (b3) -- ++(-2,-.7) node[terminal] (b3it1) {};
+    \draw[connectedTo] (b3) -- ++(-2, .7) node[terminal] (b3it2) {};
+    \draw[dotted] (b3it1) -- (b3it2);
+    \draw[connectedTo] (b3) -- ++( 2,-.7) node[terminal] (b3ot1) {};
+    \draw[connectedTo] (b3) -- ++( 2, .7) node[terminal] (b3ot2) {};
+    \draw[dotted] (b3ot1) -- (b3ot2);
+
+    \draw[connectedTo] (b3it1) -- ++(-2, 0) node[connector] (c3)  {};
+    \draw[connectedTo] (b3it2) -- ++(-2, 0) node[connector] (c4)  {};
+
+    \draw[dashed] (c1) -- (c3);
+    \draw[dashed] (c2) -- (c4);
+
+    %% parts step 2
+
+    \node[block]       (b4)   at (-5,-5.5)  {};
+    \draw[connectedTo] (b4) -- ++(-2,-.7) node[terminal] (b4it1) {};
+    \draw[connectedTo] (b4) -- ++(-2, .7) node[terminal] (b4it2) {};
+    \draw[dotted] (b4it1) -- (b4it2);
+    \draw[connectedTo] (b4) -- ++( 2,-.7) node[terminal] (b4ot1) {};
+    \draw[connectedTo] (b4) -- ++( 2, .7) node[terminal] (b4ot2) {};
+    \draw[dotted] (b4ot1) -- (b4ot2);
+
+    \draw[connectedTo] (b4ot1) -- ++(2, 0) node[connector] (c1)  {};
+    \draw[connectedTo] (b4ot2) -- ++(2, 0) node[connector] (c2)  {};
+
+    \node[block]       (b5)   at (5,-5.5)  {};
+    \draw[connectedTo] (b5) -- ++(-2,-.7) node[terminal] (b5it1) {};
+    \draw[connectedTo] (b5) -- ++(-2, .7) node[terminal] (b5it2) {};
+    \draw[dotted] (b5it1) -- (b5it2);
+    \draw[connectedTo] (b5) -- ++( 2,-.7) node[terminal] (b5ot1) {};
+    \draw[connectedTo] (b5) -- ++( 2, .7) node[terminal] (b5ot2) {};
+    \draw[dotted] (b5ot1) -- (b5ot2);
+
+    \draw[connectedTo] (b5it1) -- ++(-2, 0) node[connector] (c3)  {};
+    \draw[connectedTo] (b5it2) -- ++(-2, 0) node[connector] (c4)  {};
+    
+    \draw[dashed] (c1) -- (c3);
+    \draw[dashed] (c2) -- (c4);
+
+    %% surrounding boxes
+
+    \node[fit=(b1it1)(b1it2),draw, inner sep=5pt,gray!30,fill=none] (b1sit) {};
+    \node[fit=(b1ot1)(b1ot2),draw, inner sep=5pt,gray!30,fill=none] (b1sot) {};
+
+    \node[fit=(b2)(b3)(b4)(b5)(b2ot2)(b5it1),draw, inner sep=10pt,gray!30,fill opacity=0.8, fill=white] (b1parts) {};
+
+    \node[fill=none] at (b1parts) {$C$};
+    
+    \node[fit=(b2it2)(b4it1),draw, inner sep=5pt,gray!30,fill=none] (b1partsit) {};
+    \node[fit=(b3ot2)(b5ot1),draw, inner sep=5pt,gray!30,fill=none] (b1partsot) {};
+    
+    \draw[containedIn] (b1parts)   -- (b1);
+    \draw[containedIn] (b1partsit.north) -- (b1sit.west);
+    \draw[containedIn] (b1partsot.north) -- (b1sot.east);
+    
+  \end{tikzpicture}
+
+  \caption{Pattern for breakdown hierarchies. The \ow{Block} $b$ is
+    broken down to a set of \ow{Element}s (boxed by $C$) that are all
+    \ow{partOf} $b$ and form a legal topological structure, and is
+    such that \ow{adjacentTo} relationships from a part of
+    $b$ can only go to other parts of $b$ or to the parts of $b$'s
+    \ow{Terminal}s. All the \ow{Terminal}s that connect into an
+    \ow{Element} of $C$ (and not between \ow{Element}s of $C$) must be
+    \ow{partOf} one of $b$'s \ow{Terminal}s.
+    %
+    Note that the surrounding boxes used in the diagram are
+    simplifications; relations must go between \ow{Element}s and not
+    sets of \ow{Element}s. }
+  \label{fig:partonomy-pattern}
+\end{figure}
+
+
+The parts of an \ow{Element} must form a legal topological structure
+as described in \autoref{sec:topology}. \ow{Element}s can have any
+kind of \ow{Element}s as parts, except \ow{Terminal} whose parts must
+be \ow{Terminal}s. The parts of an \ow{Element} are internal to the
+\ow{Element} and may not directly connect to external \ow{Element}s,
+except to \ow{Element}s that are \ow{partOf} the \ow{Terminal} of the
+parent \ow{Element} (\autoref{fig:partonomy-pattern}).
+
+
+\begin{figure}
+\centering
+\input{./figure/ontology-partonomy}
+\caption{\label{uml-partonomy}
+Partonomy relations.}
+\end{figure}
+
+The following axioms are defined for partonomy relations (\autoref{uml-partonomy}):
+\begin{axioms}~
+  \begin{enumerate}[resume=axioms,{label=(\arabic*)}]
+  \item \ow{containedIn} is an \ow{intraAspectRelation}.
+  \item \ow{containedIn} is transitive.
+  \item The inverse relation of \ow{containedIn} is \ow{contains}. 
+  \item \ow{partOf} is a (non-transitive) subrelation of \ow{containedIn}. 
+  \item \ow{partOf} is functional.
+  \item \ow{partOf} is irreflexive.
+  \item \ow{hasPart} is the inverse relation of \ow{partOf}.
+  \item A \ow{containedIn} relationship must be realized by a chain of \ow{partOf} relationships.
+  \item A \ow{Terminal} can only have \ow{Terminal}s as parts. 
+  \item If two \ow{Element}s are \ow{adjacentTo} each other either,
+    then they are each \ow{partOf} two \ow{Element}s that are
+    either equal or they are also \ow{adjacentTo} each other.
+  \end{enumerate}
+\end{axioms}
+
+
+\subsubsection{Media transfer}
+\label{sec:media-transfer}
+
+Topologically connected \ow{Block}s may interact by transferring media
+between them.  The media transfer must respect the \ow{direction} and
+media specified for the \ow{Terminal}s involved in the transfer.
+
+The defining relation for media transfer is \ow{transfersTo}.
+%
+\ow{transfersTo} is a relation between two \ow{Terminal}s or between
+two \ow{Block}s such that $\ow{transfersTo}(a,b)$ expresses that (the
+source \ow{Element}) $a$ transfers to (the target \ow{Element}) $b$.
+%
+A \ow{transfersTo} relation between two \ow{Block}s must be
+realized by a \ow{transfersTo} relationship between \ow{Terminal}s
+that belong to the \ow{Block}s.
+%
+\ow{transfersTo} is a non-symmetric subrelation of \ow{connectedTo}:
+only \ow{Element}s that are \ow{connectedTo} each other can
+\ow{transfersTo} each other, with the following restrictions:
+%
+an \ow{OutputTerminal} may only \ow{transfersTo} an
+\ow{InputTerminal}, and a \ow{BiTerminal} may only \ow{transfersTo} a
+\ow{BiTerminal}. An \ow{InputTerminal} cannot be the source
+\ow{Element} in a \ow{transfersTo} relationship, it may only be the target.
+
+\ow{medium} is a subrelation of \ow{classifier} that indicates the
+medium that a \ow{Terminal} or \ow{Connector} handles.
+
+\begin{figure}
+\centering
+\input{./figure/ontology-mediaTransfer}
+\caption{\label{uml-transfers}
+  Media transfer relations.}
+\end{figure}
+
+The following axioms are defined for media transfer relations (\autoref{uml-transfers}):
+\begin{axioms}~
+  \begin{enumerate}[resume=axioms,{label=(\arabic*)}]
+  \item \ow{medium} is a subrelation of \ow{classifier} that relates a
+    \ow{Terminal} or a \ow{Connector} to an external medium classifier.
+  \item \ow{transfersTo} is a relation between \ow{Terminal}s or between \ow{Block}s.
+  \item \ow{transfersTo} is a subrelation of \ow{connectedTo}.
+  \item \ow{transfersTo} is irreflexive.
+  \item \ow{OutputTerminal}s may only \ow{transfersTo} \ow{InputTerminal}s.
+  \item \ow{BiTerminal}s may only \ow{transfersTo} \ow{BiTerminal}s.
+  \item \ow{InputTerminal}s may not \ow{transfersTo}.
+  \item A \ow{transfersTo} relationship between \ow{Block}s must be
+    realized by a \ow{transfersTo} relationships between
+    \ow{Terminal}s.
+  \end{enumerate}
+\end{axioms}
+
+\subsection{\ow{AspectElement} relations}
+\label{sec:owasp-relat}
+
+
+Descriptions of different aspects of entities are represented by
+different \ow{AspectElement}s.
+%
+\ow{AspectElement} relations are relations that relate
+\ow{AspectElement} which represent different \ow{Aspect} of the same
+entity.
+
+An entity may only be represented by at most one \ow{AspectElement}
+for each \ow{Aspect}, and one \ow{NoAspectElement}.
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+
+    \node[block,function]  (f) at (-2,  2)  {$f$};
+    \node[block,location]  (l) at ( 2 , 2)  {$l$};
+    \node[block,product]   (p) at (-2 ,-2)  {$p$};
+    \node[block,installed] (i) at ( 2 ,-2)  {$i$};
+    
+    \draw[proxy] (f) -- (l) -- (i) -- (p) -- (f);
+
+    \draw[proxy]  (f) to[bend left=40] (i);
+    \draw[proxy]  (l) to[bend left=40] (p);
+
+    \node[block]      (n) at (0,0)  {$n$};
+    \draw[projection] (n) -- (f);
+    \draw[projection] (n) -- (l);
+    \draw[projection] (n) -- (p);
+    \draw[projection] (n) -- (i);
+
+  \end{tikzpicture}
+  \caption{Example of cluster of \ow{proxy} \ow{Elements}. The
+    \ow{AspectElement}s $f$, $l$, $p$ and $i$ are all \ow{proxy} related, and
+    \ow{projection}s of the \ow{NoAspectElement} $n$.}
+  \label{fig:proxy-elements}
+\end{figure}
+
+There are two \ow{AspectElement} relations.
+%
+\ow{projection} is the relation between a \ow{NoAspectElement} and an
+\ow{AspectElement}, such that $\ow{projection}(a,b)$ expresses that
+$a$ is an \ow{NoAspectElement} representation of an entity and $b$
+(called the projection of $a$) is an \ow{AspectElement}
+representations of the same entity.  \ow{proxy} is the relation
+between two \ow{AspectElement}s, such that $\ow{proxy}(a,b)$ expresses
+that $a$ and $b$ are two different \ow{AspectElement}s that are
+\ow{projection}s of the same \ow{NoAspectElement} (\autoref{fig:proxy-elements}).
+
+
+The following axioms are defined for \ow{AspectElement} relations:
+\begin{axioms}~
+  \begin{enumerate}[resume=axioms,{label=(\arabic*)}]
+  \item \ow{projection} is an inverse functional
+    \ow{interAspectRelation} relation from a \ow{NoAspectElement} to
+    \ow{AspectElement}.
+  \item \ow{proxy} is a \ow{interAspectRelation} between two different
+    \ow{AspectElement}s that are \ow{projection}s of the same
+    \ow{NoAspectElement}.
+  \end{enumerate}
+\end{axioms}
+
+\subsubsection{Requirement--Solution relations}
+
+Requirement--Solution relations are used to express that \ow{Element}s
+may express requirements that other \ow{Element} may satisfy and
+provide solution for.
+
+\ow{fulfilledBy} is a hierarchical relation between \ow{Element}, such
+that $\ow{fulfilledBy}(a,b)$ expresses that $b$ is intended as a
+solution to the requirements posited by $a$.
+
+The following axioms are defined for Requirement--Solution relations:
+\begin{axioms}~
+  \begin{enumerate}[resume=axioms,{label=(\arabic*)}]
+  \item \ow{fulfilledBy} is a subrelation of \ow{elementRelation}.
+  \item \ow{fulfills} is the inverse relation of \ow{fulfilledBy}.
+  \end{enumerate}
+\end{axioms}
+
+
+
+\subsection{Attributes}
+\label{sec:attributes}
+
+\ow{Attribute}s and \ow{AttributeGroup}s are \ow{Descriptor}s for assigning data values to \ow{Element}s.
+%
+The vocabulary for expressing \ow{Attribute}s is shown in \autoref{uml-attribute}.
+%
+An \ow{Attribute} can be specified with a \ow{predicate}, \ow{uom}
+(unit of measure) and a \ow{value}.
+
+\ow{Attribute}s may be grouped into
+\ow{AttributeGroup}s, using the relation \ow{memberOf} or its inverse relation \ow{hasMember}.
+$\ow{memberOf}(a,b)$ expresses that $a$ is member of $b$.
+
+Both \ow{Attribute}s and
+\ow{AttributeGroup}s can be qualified by different \ow{classifier}s (see
+\autoref{sec:classifiers}) as a means to describe them.
+
+\begin{axioms}~
+  \begin{enumerate}[resume=axioms,{label=(\arabic*)}]
+  \item \ow{hasAttribute} is a subrelation of \ow{reference} between \ow{Element} and \ow{Attribute}.
+  \item \ow{uom} is a subrelation of \ow{reference} from \ow{Attribute}.
+  \item \ow{value} is a datatype relation from \ow{Attribute} to a value.
+  \item \ow{predicate} is a subrelation of \ow{classifier} from an \ow{Attribute}.
+  \item An \ow{Attribute} can only be member of an \ow{AttributeGroup}, and
+    an \ow{AttributeGroup} can only have \ow{Attribute}s as members.
+  \end{enumerate}
+\end{axioms}
+
+
+
+\begin{figure}
+\centering
+\input{./figure/ontology-attributes}
+\caption{\label{uml-attribute}
+\ow{Attribute} and \ow{AttributeGroup}s.}
+\end{figure}
+
+
+
+\subsection{Other}
+
+The ontology contains a few other relations to describe \ow{Entity}-s:
+
+\begin{itemize}
+\item \ow{symbol} is a relation to associate a graphical representation, e.g., a diagram icon, with an \ow{Entity}.
+
+\item \ow{color} is an annotation relation that is used to associate a resource with a color for use in visualizations.
+
+\item \ow{notation} is a relation that is used to associate an \ow{Element} with an reference designation system (RDS) code.
+
+\item \ow{prefix} is an annotation relation that is used to associate an \ow{Aspect} with its RDS prefix.
+
+\end{itemize}
+
+
+
+
+
+
+%\subsection{Classifiers}
+%\label{sec:classifiers}
+% medium: list 4 highlevel medium
+
+
+
+\end{document}
+
+TODO:
+
+- new section on classifiers, listing values:
+  - media
+  - attribute classifiers
+  - examples of classifiers.
+  
+- fulfilledBy, partial
+
+- search for @TODO
+- move intro text to chap 3?
+- include examples?
+- what does modellers need to know
+- what does rp need to know
+- look to
+  - fol,
+  - visualization,
+  - ontology,
+  - old ch 4
+  - do we need a node shape for element? dashed rectangle/ellipse?
+  - do we need a node shape for external classifier? dashed rectangle/ellipse?
+- media
+- differences from previous version:
+  - connection points are renamed to connectors
+  - breakdown points are removed
+  - aspects are renamed
+  - visualization is changed
+  - inter-aspect relations are simplified to proxy
+  - an aspect for no aspect is introduced
+- RDL
+  - subsection somewhere in intro
+    - media
+- model
+- identifiers
+- templas
+- sameas
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:

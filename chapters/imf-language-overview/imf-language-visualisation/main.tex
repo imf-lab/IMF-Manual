@@ -1,0 +1,320 @@
+\documentclass[11pt,fleqn]{article}
+
+% from commons
+\usepackage{commons/imf-spec}
+\usepackage{commons/imf-spec-draft}
+
+\usepackage{imf-style-tikz}
+\usepackage{style}
+
+%% avoid compiling heavy things
+%\usepackage{environ}
+%\RenewEnviron{figure}{}
+%\RenewEnviron{table}{}
+%\RenewEnviron{tblr}{[draft-mode]}
+
+\input{frontpage}
+
+\section{Introduction}
+
+This specification gives guidelines for how the Information Modelling
+Framework (IMF) language may be visualized.
+
+\input{README.md}
+
+The graphical notation is designed to be supported by common graph
+model based languages and tools such as
+RDF,\footnote{\url{https://www.w3.org/RDF/}}
+GraphML,\footnote{\url{https://graphml.graphdrawing.org/}} and
+Graphviz,\footnote{\url{https://graphviz.org/}} but should
+be applicable to a wide range of modelling and visualization tools.
+
+% \paragraph{Other specifications}
+
+\RFCkwnote{}
+
+\paragraph{Tools and implementations}
+
+Information on tools and implementations of this specification can be
+found in the repository of the specification.
+
+\paragraph{Notation}
+
+Terms defined in the formal IMF language are in this specification
+written using the following font face: \ow{Element}, \ow{connectedTo}.
+
+\section{Overview}
+
+IMF models are represented visually using a graph model. \ow{Element}s
+are represented as nodes, where the different types of \ow{Element}s,
+e.g., \ow{Block}, \ow{Terminal} and \ow{Connector}, are represented
+using different node shapes and sizes. Relationships between \ow{Element}s
+are represented as edges between nodes, where different relations are
+visualized using different arrowheads and line styles. \ow{Aspect}s
+are represented using different fill colours.
+\ow{Element}s can be grouped and the visualization of the group
+can use visual effects to describe its \ow{Element}s.
+
+\input{figure/all-graphics}
+
+\section{\ow{Element}s}
+ 
+\ow{Element}s are visualized using nodes of different shapes; all node
+shapes are displayed in \autoref{fig:graphics-node-shapes}. Nodes may have
+different shapes and sizes. They may also be coloured; this is
+described in \autoref{sec:aspect-elements}.
+%
+An \ow{Element} \kw{should} be labelled with an identifier or name when this
+is necessary to distinguish it from other \ow{Element}s.
+
+\input{figure/all-nodes}
+
+\subsection{\ow{Block}}
+
+A \ow{Block} \kw{must} be visualized as a rectangle, and \kw{should} have square
+corners. The rectangle \kw{should} be oriented so that the horizontal lines
+are about twice the length of its vertical lines.
+
+\subsection{\ow{Connector}}
+
+A \ow{Connector} \kw{must} be visualized by a circle. The diameter of the circle
+\kw{should} be about half the size of the vertical lines of the \ow{Block}s it
+is topologically adjacent to.
+
+\subsection{\ow{Terminal}}
+
+A \ow{Terminal} \kw{must} be visualized by a square, and \kw{should} have rounded
+corners.  
+
+An \ow{InputTerminal} \kw{must} be labelled with a minus character.
+An \ow{OutputTerminal} \kw{must} be labelled with a plus character.
+A \ow{BiTerminal} \kw{may} be labelled with a minus and a plus character.
+A \ow{Terminal} where the flow direction is unknown is unlabelled.
+
+The \ow{Terminal} node shape \kw{should} be slightly smaller than the
+\ow{Connector} it is topologically adjacent to.
+
+A \ow{Terminal} \kw{should} be placed close to, or may even overlap with, its
+\ow{Block} and \kw{should} always be placed closer to its \ow{Block} than
+to its topologically adjacent \ow{Connector}.
+
+An \ow{InputTerminal} \kw{should} be placed left of its \ow{Block}, and an
+\ow{OutputTerminal} \kw{should} be placed right of its \ow{Block}.  A
+\ow{BiTerminal} \kw{should} be placed at the side which reflects its most
+prominent direction, or, if it has no prominent direction, below or above its \ow{Block}.
+
+\section{Relations}
+
+Relationships are visualized by edges (or lines or arrows) between
+two nodes. An edge may have an arrowhead to indicate the
+direction---no arrowhead if there is no natural direction, and may have different line style, e.g.,
+solid, dashed or dotted. Edges may use different colours for
+grouping, highlighting or hiding information, but colours on edges have
+no formal meaning. All edge styles are displayed in \autoref{fig:graphics-all-edges}.
+
+Note that we often do not distinguish visually between a relation and
+its subrelations. This is to reduce the number of different visual
+features. Edges \kw{may} be labelled with the name of their
+relation.
+
+\input{figure/all-relations}
+
+\subsection{Topology: \ow{connectedTo}}
+
+Topology is represented by the relation
+\ow{connectedTo} and its subrelations.
+
+All topology relationships \kw{must} be visualized by a solid line with no
+arrowhead, and \kw{should} be oriented horizontally.
+
+
+\subsection{Media Transfer: \ow{transfersTo}}
+
+Media transfer is represented with the relation \ow{transfersTo}.
+
+These relationships \kw{must} be visualized by a solid line, in the
+same style as topology relationships, but with a solid arrow head
+pointing from the source and to the target of the media transfer, and
+\kw{should} be oriented horizontally, placing sources left of targets.
+
+\subsection{Partonomy: \ow{containedIn}}
+
+Partonomy is represented with the relation \ow{containedIn}, its inverse relation and their subrelations.
+
+These relationships \kw{must} be visualized by a solid line and a solid diamond
+arrowhead pointing from the part and to the whole,
+and \kw{should} be oriented vertically, placing parts below wholes.
+
+\subsection{Proxy: \ow{proxy}}
+
+Proxy relationships are represented by the relation \ow{proxy}.
+
+These relationships \kw{must} be visualized by a dotted line without arrowhead, and
+\kw{should} be oriented so that proxy elements appear as clusters, i.e., placed close to each other.
+
+\subsection{Projection: \ow{projection}}
+
+Projection relationships go between non-perspective elements and their proxies,
+and are represented by the relation \ow{projection}.
+
+These relationships \kw{must} be visualized by a dotted line, in the same
+style as proxy relationships, but with a solid arrowhead, and
+\kw{should} be oriented so that the source of the projection appears to be the central node, either by placing it in the
+centre of or above the cluster or proxies.
+
+\subsection{Specialization: \ow{specializationOf}}
+
+Specialization relationships are represented with the relation
+\ow{specializationOf} and its inverse.
+
+These relationships \kw{must} be visualized by a solid line with an
+open arrowhead pointing from the specific to the generic \ow{Element}, and
+\kw{should} be oriented vertically, placing specific elements below generic.
+
+\subsection{Requirement--Solution: \ow{fulfills}}
+
+Requirement--solution relationships between \ow{Element}s express that
+the target \ow{Element} is a solution to the requirement stated by
+the source element.
+
+Requirement--solution relationships are represented by the relation
+\ow{fulfilledBy} and its inverse \ow{fulfills}.
+
+These relationships \kw{must} be visualized by a dashed line
+with an open arrowhead pointing from the solution element to the
+requirement element, and
+\kw{should} be oriented vertically, placing solution \ow{Element}s below requirement \ow{Element}s.
+
+\ow{fulfilledBy} relationships are represented as the inverse of
+\ow{fulfills}.
+
+
+\subsection{Equality: \ow{sameAs}}
+
+Sometimes it is necessary or convenient to represent one \ow{Element}
+with multiple nodes. This \kw{should} be avoided due to the
+added complexity this adds to understanding visualizations.
+%
+Equality relationships can be used for this purpose as they to express
+that two \ow{Element}s are equal.
+
+Equality relationships are represented by the relation \ow{sameAs}.
+
+These relationships \kw{should} be visualized by an emphasized solid line,
+e.g., the line can be thicker than other lines, or it can be drawn using
+a double line. The line \kw{should} be labelled with an equals sign or with
+the label ``\ow{sameAs}''.
+
+\section{\ow{Aspect}s}
+\label{sec:aspect-elements}
+
+\ow{Aspect}s \kw{must} be visualized using a specified fill colour on the \ow{Element}s' shape.
+
+Colours are given in \autoref{tbl:graphics-all-colours},
+%
+and \autoref{fig:graphics-ex-coloured-blocks} displays the colours demonstrated on \ow{Block}s.
+
+
+\input{figure/all-colours}
+
+\input{figure/ex-coloured-blocks}
+
+The colour of additional \ow{Aspect}s \kw{should} be created by mixing the predefined colours so that it reflects the definition of the \ow{Aspect}.
+For instance, an \ow{Aspect} whose primary focus is \ow{Activity} should be given a colour that is more yellow than magenta or cyan.
+\autoref{tbl:graphics-colour-sugggestions} contains a list of suggested colours.
+
+\input{figure/colour-suggestions}
+
+
+An \ow{AspectElement}s may be left unspecified in the case that their
+\ow{Aspect} is clear from surrounding \ow{Element}s. This is in particular
+the case for \ow{Terminal}s that share the \ow{Aspect} of the
+\ow{Block} they belong to. \autoref{fig:unspecified-perspective} shows an example.
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \node[block,activity] (a) at (0,0)  {};
+    \node[terminal,unknown] (b) at (2.5,0)  {};
+    \draw (a) edge[connectedTo] (b);
+  \end{tikzpicture}
+  \caption{Example: A \ow{Terminal} with unspecified \ow{Aspect} will ``inherit'' the
+    \ow{Aspect} of its \ow{Block}.}
+  \label{fig:unspecified-perspective}
+\end{figure}
+
+
+\section{Groups}
+
+Groups of \ow{Element}s are visualized by placing the \ow{Element}s in
+an enclosing shape, typically a rectangle.
+\autoref{fig:stages-group-ex} gives an example of grouping.
+
+%%% 
+% Groups are typically used for \ow{Element}s that share some
+% characteristics can be used to avoid repeating visual representation
+% of the shared values for each \ow{Element}, but rather apply the
+% visual representation on the group visualization.
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}[scale=.8]
+  \node[block,unknown]     (a) at (0,0)   {$a$};
+  \node[connector,activity] (c) at (4,0)   {$b$};
+  \node[block,activity]     (e) at (8,0)   {$c$};
+  \node[block,activity]     (f) at (8,-3)  {$d$};
+
+  \node[fit=(a)(f), draw, inner sep=20pt] {};
+
+  \draw (a) edge[connectedTo] (c);
+  \draw (c) edge[connectedTo] (e);
+
+  \draw (f) edge[containedIn] (e);
+
+  \node[block,implementation]     (a2) at (0,-8)  {$m$};
+  \node[terminal,unknown]        (b2) at (2,-8) {$n$};
+  \node[connector,implementation] (c2) at (4,-8)  {$o$};
+  \node[terminal,unknown]        (d2) at (6,-8)  {$p$};
+  \node[block,implementation]     (e2) at (8,-8)  {$q$};
+
+  \draw (a2) edge[connectedTo] (b2);
+  \draw (b2) edge[connectedTo] (c2);
+  \draw (c2) edge[connectedTo] (d2);
+  \draw (d2) edge[connectedTo] (e2);
+
+  \draw (b2) edge[transfersTo,bend left=30] (d2);
+  
+  \node[fit=(a2)(e2), draw, inner sep=20pt] {};
+
+  \draw (a2) edge[fulfills] (a);
+  \draw (e2) edge[fulfills] (f);
+  
+\end{tikzpicture}
+
+\caption{\label{fig:stages-group-ex} Example of grouping. The
+  visualization contains two groups: the \ow{Element}s labelled $a$,
+  $b$, $c$ and $d$; and $m$, $n$, $o$, $p$ and $q$. 
+  %, share the same
+  %\ow{Stage} as indicated by the border colour of the box surrounding
+  %them.
+}
+\end{figure}
+
+\section{Other: Attributes, Classifiers and metadata}
+
+The IMF language supports assigning more information to \ow{Element}s; this includes \ow{Attribute}s, \ow{classifier}s and metadata, such as textual definitions.
+
+In order to keep visualizations of IMF models simple, these additional
+information objects do not have a graphical representation. Rather, if
+necessary, they can be represented as lists of attributes that
+are associates with its \ow{Element} using appropriate features of the
+used visualization tool or language.
+
+\section{Types and Templates}
+
+The IMF language supports creating IMF model statements by
+instantiating types and templates. This version of the specification does not
+describe how to represent the association between a type or template and its
+instances.
+ 
+\end{document}

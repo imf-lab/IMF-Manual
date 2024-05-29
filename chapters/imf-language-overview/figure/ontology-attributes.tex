@@ -1,0 +1,30 @@
+\begin{tikzpicture}
+
+  \tikzElement
+
+  \node[oClass, below right = 0 and 3 of e] (atr) {Attribute};
+  \node[oClass, above = 1.5 of atr] (atrg) {AttributeGroup};
+
+  \node[oExt, right = 1.5 of atrg] (qual) {};
+  \node[oExt, below =     of qual] (pred) {};
+  \node[oExt, below = 0.5 of pred] (uom) {};
+  \node[oInd, below = 0.5 of uom] (val) {};
+
+  \draw [oRelDir] (e) to[] node[oRlab] {hasAttribute} (atr);
+  \draw [oRelDir] (e) to[] node[oRlab] {hasAttribute} (atrg);
+  \draw [oRelDir] (atrg) to[] node[oRlab] {hasAttribute} (atr);
+
+  \draw [oRelDir] (atrg) to[] node[oRlab] {qualifier} (qual);
+  \draw [oRelDir] (atr)  to[] node[oRlab] {qualifier} (qual);
+  
+  \draw [oRelDir] (atr) to[] node[oRlab] {uom} (uom);
+  \draw [oRelDir] (atr) to[] node[oRlab] {predicate} (pred);
+  \draw [oRelDir] (atr) to[] node[oRlab] {value} (val);
+  
+
+\end{tikzpicture}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End:

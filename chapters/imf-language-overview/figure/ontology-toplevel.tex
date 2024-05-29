@@ -1,0 +1,30 @@
+\begin{tikzpicture}
+  \tikzElement
+
+  \node[oClass, right = 2 of e] (d)    {Descriptor};
+  \node[oClass, right = 2 of d] (i)    {InformationModel};
+
+  \node[oClass, above = of d]   (ia)   {InformationArtefact};
+  \node[oClass, above = of ia]  (ent)  {Entity};
+
+  \draw[oSpec] (e) -- (ia);
+  \draw[oSpec] (d) -- (ia);
+  \draw[oSpec] (i) -- (ia);
+  \draw[oSpec] (ia) -- (ent);
+
+
+
+  \draw[oRelDir,emph] (d) to [out=60 ,in=10 ,looseness=4] node[oRlab] {hasCharacteristic}   (d);
+
+  \draw[oRelDir,emph] (i) to [bend left] node[oRlab] {hasMember} (e);
+  \draw[oRelDir,emph] (i) to [bend left] node[oRlab] {hasMember} (d);
+
+  \draw[oRelDir,emph,dashed] (e) to node[oRlab] {reference} (d);
+
+\end{tikzpicture}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End:

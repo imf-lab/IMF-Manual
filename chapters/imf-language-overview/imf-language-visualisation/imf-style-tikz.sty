@@ -1,0 +1,62 @@
+\usepackage{tikz}
+%\usetikzlibrary{positioning}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{quotes}
+\usetikzlibrary{fit}
+\usetikzlibrary{backgrounds}
+
+\tikzstyle{every node}          = [text centered,align=center]
+\tikzstyle{every edge quotes}   = [above,sloped]
+
+
+%% Elements
+
+\tikzstyle{element}          = [draw]
+\tikzstyle{block}            = [element, rectangle, minimum width=12ex,minimum height=6ex]
+\tikzstyle{connector}        = [element, circle, minimum size=3ex]
+\tikzstyle{terminal}         = [element, rectangle, rounded corners=.15ex, minimum size=2.5ex]
+\tikzstyle{inputterminal}    = [terminal, font={$-$}]
+\tikzstyle{outputterminal}   = [terminal, font={$+$}]
+\tikzstyle{biterminal}       = [terminal, font={$\pm$}]
+
+
+%% Relations
+
+\tikzstyle{relation}           = [thick]
+\tikzstyle{connectedTo}        = [relation, -]
+\tikzstyle{transfersTo}        = [connectedTo,-latex]
+\tikzstyle{containedIn}        = [relation, -Diamond]
+\tikzstyle{proxy}              = [relation, -, dotted]
+\tikzstyle{projection}         = [proxy, -latex]
+\tikzstyle{specializationOf}   = [relation, -{Triangle[open]}]
+\tikzstyle{fulfills}           = [specializationOf, dashed]
+\tikzstyle{equals}             = [relation, double, "="]
+
+
+%% entity type filter colours
+
+\definecolor{cActivity}{HTML}{FFFF00}
+\definecolor{cImplementation}{HTML}{00FFFF}
+\definecolor{cSpace}{HTML}{FF00FF}
+
+\tikzstyle{activity}           = [fill=cActivity]
+\tikzstyle{implementation}     = [fill=cImplementation]
+\tikzstyle{space}              = [fill=cSpace]
+
+
+% Aspects
+
+\definecolor{cFunction}{HTML}{FFFF00}
+\definecolor{cLocation}{HTML}{00FFFF}
+\definecolor{cProduct}{HTML}{FF00FF}
+\definecolor{cInstalled}{HTML}{0000FF}
+
+\tikzstyle{nonaspect}          = [fill=white]
+\tikzstyle{unknown}            = [fill=gray!40]
+
+\tikzstyle{function}           = [fill=cFunction]
+\tikzstyle{location}           = [fill=cLocation]
+\tikzstyle{product}            = [fill=cProduct]
+\tikzstyle{installed}          = [fill=cInstalled]
+
+

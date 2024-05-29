@@ -1,0 +1,47 @@
+\begin{figure}
+  \centering
+  \begin{tblr}{
+      colspec = {Q[c,h]Q[c,h]Q[c,h]},
+      stretch = 0,
+      rowsep = 3pt,
+    }
+    Shapes & Relations & Fill colours \\ \hline
+    \begin{tblr}{
+        colspec = {Q[l,m]Q[c,m]},
+        rowsep = 3pt,
+      }
+      \ow{Block}           & \tikz\node[block,scale=0.5]{};\\
+      \ow{Connector}       & \tikz\node[connector]{};\\
+      \ow{Terminal}        & \tikz\node[terminal]{};\\
+      \ow{InputTerminal}   & \tikz\node[inputterminal]{};\\
+      \ow{OutputTerminal}  & \tikz\node[outputterminal]{};\\
+      \ow{BiTerminal}      & \tikz\node[biterminal]{};
+    \end{tblr}
+    &
+    \begin{tblr}{
+        colspec = {Q[l,m]Q[c,m]},
+        rowsep = 3pt,
+      }
+      Topology        & \tikz{\draw (0,0) edge[connectedTo] (1,0);}\\
+      Media Transfer  & \tikz{\draw (0,0) edge[transfersTo] (1,0);}\\
+      Partonomy       & \tikz{\draw (0,0) edge[containedIn] (1,0);}\\
+      Specialization  & \tikz{\draw (0,0) edge[specializationOf] (1,0);}\\
+      Fulfills        & \tikz{\draw (0,0) edge[fulfills] (1,0);}\\
+      Proxy           & \tikz{\draw (0,0) edge[proxy] (1,0);}\\
+      Projection      & \tikz{\draw (0,0) edge[projection] (1,0);}\\
+      Equality        & \tikz{\draw (0,0) edge[equals] (1,0);}
+    \end{tblr}
+    &
+    \begin{tblr}{
+        colspec = {Q[l,m]Q[c,m]},
+        rowsep = 3pt,
+      }      
+      \ow{Activity}                 & \mybox{ffff00}\\
+      \ow{Space}                    & \mybox{ff00ff}\\
+      \ow{Implementation}           & \mybox{00ffff}\\
+      No \ow{Aspect}                & \mybox{ffffff}\\
+      Unspecified \ow{Aspect}       & \mybox{cccccc}
+    \end{tblr}
+  \end{tblr}
+  \caption{\label{fig:graphics-all}All graphical elements.}
+\end{figure}

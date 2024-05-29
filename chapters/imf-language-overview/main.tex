@@ -1,0 +1,24 @@
+\documentclass[11pt,fleqn]{article}
+
+%% NB, this document collects latex elements from other documents that
+%% are imported using git submodules. If the imported documents are
+%% updated, this must be coordinated with the sourced document.
+\usepackage{commons/imf-spec}
+\usepackage{commons/imf-spec-draft}
+
+\usepackage{imf-language-visualisation/imf-style-tikz}
+\usepackage{figure/ontology-diagram-style}
+\usepackage{style}
+
+%% avoid compiling heavy things
+%\usepackage{environ}
+%\RenewEnviron{figure}{}
+%\RenewEnviron{table}{}
+%\RenewEnviron{tblr}{[draft---removed]}
+
+%  contains \begin{document}
+\input{frontpage}
+
+% contains \end{document}
+\section{Introduction}
+\input{content}

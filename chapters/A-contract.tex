@@ -1,0 +1,41 @@
+\documentclass[../main.tex]{subfiles}
+\graphicspath{{\subfix{../}}}
+\begin{document}
+
+
+\chapter{Contractual Information Model Requirements for a Facility Asset}
+\label{ch:Appendix B}
+The facility asset information shall be provided in a digital
+format, conforming to the following requirements:
+
+\begin{enumerate}
+  \item The facility asset information shall be provided in the form of an information model, or in the form of several
+        partial information models if the partial models include the data required to integrate the models into one
+        information model.
+  \item The facility asset information model shall be delivered in a digital structured data format.
+  \item The facility asset data shall be structured such that the data is separated into the different aspects of
+        information about the systems of the facility asset.
+  \item For each aspect specific data of a system, the information shall include how the system is partOf a
+        parent system to provide context, i.e., the hierarchy dimension of the model.
+  \item As a minimum, the Function, Product, and Location Aspects shall be included.
+  \item The granularity of the model, i.e., how far down into details the partOf breakdown is performed, shall be to the same level as the breakdown of the facility asset for the purpose of procurement or construction
+  \item The data about the relation between aspects of a system shall be included. As a minimum, the relations shall
+        include how Product fulfils Function, and how Product has Location.
+  \item The system information element shall include data about its purpose.
+  \item The system information element shall include data about its inputs and outputs in the form of terminals, and the
+        medium that they let in or out. As a minimum the media Material, Energy, Force, and Information shall be included.
+  \item The facility asset information shall include information elements with data about how the different outputs and
+        inputs in the form of terminals are connected between different systems, i.e., the topology dimension of the model.
+  \item Descriptors and identifiers shall be included to: support interoperability with external systems, and user
+        interaction
+  \item The interoperability shall as a minimum include support for loss-less transfer of facility asset information
+        between applications
+  \item The information model shall include version control mechanisms to support engineering workflows such as review
+        and revision control to support contractual obligations.
+  \item Type definitions of systems used to create the information model shall be based on international/industrial
+        standards and reference data libraries. Proprietary company and project types shall be avoided unless otherwise
+        agreed.
+\end{enumerate}
+
+\end{document}
+    

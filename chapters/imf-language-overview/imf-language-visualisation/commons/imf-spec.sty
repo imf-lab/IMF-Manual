@@ -1,0 +1,98 @@
+
+\usepackage[utf8]{inputenc}
+
+\usepackage[T1]{fontenc}
+
+\usepackage[english]{babel}
+
+\usepackage[
+protrusion=true,
+expansion=true,
+tracking=true,
+kerning=true,
+stretch=20,
+shrink=20]
+{microtype}
+\usepackage{textcomp}
+
+\usepackage{fullpage}
+\usepackage{parskip}
+\usepackage{titlesec}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+
+%\usepackage{newtxtext}
+%\usepackage{newtxmath}
+%\usepackage[scaled=.93,zerostyle=d]{newtxtt} % Nicer mono font
+%\usepackage[scaled=0.86]{helvet}
+
+\usepackage[sc]{mathpazo}
+\linespread{1.05}         % Palladio needs more leading (space between lines)
+
+%\usepackage{csquotes}
+%\usepackage{pifont}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage{graphicx}
+
+\usepackage{tabularx}
+\usepackage{tabularray}
+
+\usepackage{enumitem}
+\setlist{parsep=2pt, topsep=0pt, partopsep=2pt}
+
+\setlength{\textfloatsep}{40pt plus 2.0pt minus 4.0pt}
+\setlength{\floatsep}{20.0pt plus 2.0pt minus 2.0pt}
+\setlength{\intextsep}{20.0pt plus 2.0pt minus 2.0pt}
+
+\usepackage{biblatex}
+\addbibresource{bibliography.bib}
+
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=MidnightBlue,
+  citecolor=MidnightBlue,
+  filecolor=MidnightBlue,
+  urlcolor=MidnightBlue,
+  pdfkeywords=}
+
+\addto\extrasenglish{%
+\renewcommand{\chapterautorefname}{Chapter}
+\renewcommand{\sectionautorefname}{Section}
+\renewcommand{\subsectionautorefname}{Section}
+\renewcommand{\subsubsectionautorefname}{Section}
+}
+
+%\usepackage[acronym]{glossaries}
+%\makeglossaries
+%\usepackage{commons/imf-glossary}
+
+\newcommand{\kw}[1]{\emph{#1}}
+
+\newcommand{\RFCkwnote}{The italicized keywords
+  \kw{must},
+  \kw{must not},
+  \kw{should},
+  \kw{should not}, and
+  \kw{may}
+  are used to specify normative features, and are interpreted as specified in RFC 2119.}
+
+%% use for git commit inclusion
+\usepackage{xstring}
+\usepackage{catchfile}
+
+\newcommand{\gitrevision}{No \texttt{.git} found.}
+\IfFileExists{.git/HEAD}{%
+  \CatchFileDef{\headfull}{.git/HEAD}{}
+  \StrGobbleRight{\headfull}{1}[\head]
+  \StrBehind[2]{\head}{/}[\gitbranch]
+  \IfFileExists{.git/refs/heads/\gitbranch}{%
+    \CatchFileDef{\gitcommit}{.git/refs/heads/\gitbranch}{}%
+    \renewcommand{\gitrevision}{\texttt{\gitcommit}on branch \texttt{\gitbranch}}%
+  }{}}{}
+
+%% use for terms in the IMF ontology
+\newcommand{\ow}[1]{\textsf{#1}}

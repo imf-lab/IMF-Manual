@@ -1,0 +1,180 @@
+\documentclass[../main.tex]{subfiles}
+\graphicspath{{\subfix{../}}}
+\begin{document}
+
+\chapter{A New Way of Working using Information Models}
+\label{ch:Chapter 3}
+
+
+
+
+\section{Problem Statement}
+\label{ch:Section 1.1}
+Facility assets in the energy industry are becoming increasingly complex.
+There is a need for better communication between organisations, people, and IT systems. Actors in the industry use
+different methods, tools, and work processes to develop a facility asset. This misalignment is seen:
+
+\begin{itemize}
+  \item Along with the Capital Value Process (CVP);
+  \item Along the supply chain; and
+  \item Between disciplines and systems within the same facility asset.
+\end{itemize}
+The consequences of this are loss of information, risk of safety and quality breaches, duplication of work,
+a lot of manual mapping, reduced possibilities for re-use of concepts and design, lock-in to a portfolio of
+applications, and a lot of company-specific requirements that are tuned to fulfil needs for a certain portfolio of
+applications.
+
+\autoref{fig:Figure 1} illustrates the problem of today's way of working. The figure shows the \emph{logical} flow of value
+creation during an industrial investment and development project, the actual execution schedule will have
+many overlaps and iterations that are intentionally left out.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth]{img/IMFmanual-img001.jpg}
+  \caption{Current documentation practice during an industrial
+    investment and development project.}
+  \label{fig:Figure 1}
+\end{figure}
+
+
+When a facility asset is developed today, the work begins by defining the overall requirements and functionality
+(DG0). The result is typically contained in a few documents, which means that at this stage a holistic description is
+feasible~\ding{182}. As the work progresses into the design phase of the facility asset, more specialised discipline
+expertise is necessary (DG1 and DG2). Since the way of working is document-based, the result is an increasing number
+of documents. This leads to a fragmentation of information spread across documents, due to the inherent features of
+their format. Because of this fragmentation, it becomes increasingly difficult to maintain a holistic description of the
+facility asset. The result is extensive interface coordination between discipline experts~\ding{183}.
+
+When the investment decision is made to execute the construction of the facility asset (DG3)~\ding{184}, the number of
+documents produced grows exponentially as the supply chain involving both contractors, suppliers, and manufacturers
+ramp up their deliveries for construction, installation, and commissioning of the facility asset~\ding{185}. At this
+stage, and likely to have started earlier in the CVP, a lot of information in documents is duplicated, resulting in
+several sources of the same information. The consequence of this is labour-intensive work to
+    prevent quality deviations and HSE incidents.
+
+When the operation (DG4) and handover to the operator takes place~\ding{186}, information is fragmented and lacks
+relational information. This often results in a need to ``re-engineer'' the solution to establish the holistic view
+necessary to maintain, control and evolve the facility asset~\ding{187}.
+
+It is worth noting that reduced information quality can reduce the decision quality and is often costly and
+inefficient to manage.
+
+\section{Requirements to  Solution}
+\label{ch:Section 1.2}
+The objective of the Information Modelling Framework (IMF) is to enable
+a transition from the current documentation practice discussed in \autoref{ch:Section 1.1}, to the use of information
+  models as a way of capturing and expressing information about facility assets.
+
+To achieve this transition, the solution  must facilitate for:
+
+\begin{itemize}
+  \item Incremental implementation. Thus, handle both a new information model practice and the transition towards it,
+        yet not require existing applications and tools to be replaced.
+  \item Scalability across disciplines, work processes, and the value chain. The method needs to be granular enough to
+        support any level of complexity and detail, depending on the need and where in the process the SMEs are.
+  \item Ease of use. Be made intuitive to the extent that the SMEs themselves are users of the framework. Thus, the
+        method must support and allow existing discipline design workflows.
+  \item Utilisation and promotion of shared libraries and existing standards.
+  \item Open protocols for exchange of facility asset information and provide a format which enables automated
+        verification and augmented engineering extensions.
+\end{itemize}
+
+\section{Using Information Models}
+\label{sec:userinformationmodel}
+To solve the problems discussed in \autoref{ch:Section 1.1}, fundamental
+changes in the way we capture and represent information are needed. Used properly, information models in
+combination with reference data libraries (RDLs) include the features necessary to handle the problems of the current
+document practice.
+
+\autoref{fig:Figure 10} illustrates a new way of working using information models through the logical flow of value
+creation during an industrial investment and development project. The actual execution schedule will have many
+overlaps and iterations that are intentionally left out.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=1\textwidth]{img/IMFmanual-img010.jpg}
+  \caption{Using information models instead of documents during an
+    industrial investment and development project.}
+  \label{fig:Figure 10}
+\end{figure}
+
+The overall requirements to functionality of the facility asset (DG0) are captured in an information model~\ding{182}.
+As the work progresses into the design phase of the facility asset, several more detailed information models are
+created by discipline expertise to mature the design (DG1 and DG2)~\ding{183}. Due to the inherent features of the
+(machine-readable) format, the information models can be continuously checked for design flaws by an automated work process. Furthermore, the fragments of information, now represented through several
+information models, can be integrated along the way to ensure a consistent design and a valid description of the
+facility asset on a holistic level.
+
+When the investment decision is made to execute the construction of the facility asset (DG3)~\ding{184}, information
+models describing parts of the facility asset are produced in large quantities by the supply chain.
+
+When approaching operation (DG4) and handover to operator takes place~\ding{185}, the resulting information model, can
+be thought of as a \emph{model-of-models}, containing the historical context and all design decisions made all the way back to DG0~\ding{186}.
+The holistic description and the contents of the facility asset is available at any granular level as required to operate, control, maintain, and later do modifications on the facility asset~\ding{187}. Furthermore, access to
+information is not restricted by documents and formatting but can be navigated freely~\ding{188} and maintained efficiently.
+
+\section{New Methods, Roles, and Competencies}
+\label{sec:newmethodsroles}
+The new way of working implies new roles and requires new
+competencies. The following roles are relevant:
+
+\begin{itemize}
+  \item The \emph{subject matter expert} (SME). SMEs are experts on discipline engineering. For example, a process
+        engineer who develops the design of the main processing system, or an electrical engineer who develops the design of
+        the electrical supply and distribution.
+  \item The \emph{system engineer} is an expert on system integration. For example, a system engineer is responsible
+        for coherent integration of system designs from, e.g., different disciplines, different phases of the project
+        lifecycle and different parties in the value chain.
+  \item The \emph{data engineer} is an expert on the flow of data between IT systems and applications. For example, a
+        data engineer manages the export of data from a model authoring application into an engineering register system.
+  \item The \emph{knowledge engineer} is an expert on knowledge representation and semantic technology. For example, a knowledge engineer manages
+        the validation and integrity verification of the model of a design.
+\end{itemize}
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=1\textwidth]{img/IMFmanual-img011.jpg}
+  \caption{Different expertise and how they enable information modelling of facility assets.}
+  \label{fig:Figure 11}
+\end{figure}
+
+Engineering and design is a process of making a series of decisions founded on subject matter expertise and governed
+by requirements and limitations. This is the domain of SMEs and system engineers, but the new way of working allows a
+significant shift in focus away from \emph{formatting} of information, and towards \emph{creating} information.
+It is less constrained by document formats and instead allows a much more flexible and incremental way of creating a
+design. This will have an impact on how the work is optimally allocated into different roles.
+
+The SME role is by definition to hold expertise on a defined subject, usually a single discipline, but the new way of
+working will reward an approach of also working across disciplines that are interlinked and interdependent, thus
+reducing time-consuming coordination effort. As systems thinking is a fundamental part, the system engineer role may
+have a stronger impact, in particular when integrating segments of models into a whole, and when managing how systems
+interact.
+
+While the data engineer has conventionally had more focus on batch transfer of data between systems, this role will
+need to strengthen the focus on publishing and sharing of model data, and on leveraging semantic technologies. A
+significant value of modelling is that it allows use of advanced semantic technologies and mechanisms for
+machine-based validation and verification. The role of the knowledge engineer is instrumental for achieving this.
+
+\autoref{fig:Figure 11} illustrates how the different roles work together to enable modelling of parts of the facility asset that
+then are integrated into a complete model where semantic technology is utilised to verify and validate the integrity
+of the model.
+
+
+SMEs model information that today is available only in fragments, commonly recorded in documents~\ding{182}.  The documents
+may refer to standards, possibly exploiting reference data, such as names of shared properties and classes, and
+initiatives to digitally enrich documentation format such as DEXPI\footnote{\url{https://dexpi.org/specifications/}}
+\ding{183}.  When modelling, the SME creates the building blocks of the model from definitions held in a common
+industry library, a reference data library~\ding{184}, enabling the re-use of well-proven design patterns (e.g., type
+of pump configuration). The building blocks are put together into a model in accordance with the rules and
+structures of IMF that build on the IEC/ISO81346 O\&G standard~\cite{81346-OG}~\ding{185}.
+
+IMF does not require modelling to be done in one single model, something which often is implied when referring to data-centric
+or model-centric ways of working. Instead, the modelling can be distributed across many smaller IMF models, here shown as puzzle
+pieces, that the system engineer later can bring together as a complete puzzle~\ding{186}. IMF models can be
+translated~\ding{187} into semantically enriched models that enable the knowledge engineers to exploit verification techniques such as automated
+reasoning~\ding{188}.
+
+%\input{chapters/M-ecosystem}
+
+
+\end{document}

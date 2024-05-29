@@ -1,0 +1,14 @@
+\begin{tikzpicture}
+
+  \tikzElementsBasic
+
+  \node[oExt, above right = 0 and 2 of e] (1) {};
+  \node[oExt, below left = 1 and .5 of c] (2) {};
+  
+  \draw [oRelDir, emph] (e) to[bend left] node[oRlab] {primaryClassifier} (1);
+  \draw [oRelDir, emph] (e) to[out=0,in =-140] node[oRlab,below] {auxilliaryClassifier} (1);
+
+  \draw [oRelDir, emph] (t) to[] node[oRlab] {medium} (2);
+  \draw [oRelDir, emph] (c) to[] node[oRlab] {medium} (2);
+
+\end{tikzpicture}

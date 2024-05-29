@@ -1,0 +1,114 @@
+\usepackage[utf8]{inputenc}
+
+\usepackage[
+protrusion=true,
+expansion=true,
+tracking=true,
+kerning=true,
+stretch=20,
+shrink=20]
+{microtype}
+
+\usepackage{parskip}
+\usepackage{fullpage}
+\usepackage{pifont}
+
+\usepackage{amsmath}
+\usepackage{amssymb,amsfonts,textcomp}
+
+\usepackage[T1]{fontenc}
+%\usepackage{newtxtext,newtxmath}
+%\usepackage[scaled=.93]{newtxtt} % Nicer mono font?
+
+\usepackage[sc]{mathpazo}
+\linespread{1.05}         % Palladio needs more leading (space between lines)
+
+\usepackage{csquotes}
+
+\usepackage[english]{babel}
+\usepackage[dvipsnames]{xcolor}
+
+% \usepackage{array}
+%\usepackage{supertabular}
+\usepackage{tabularx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{hhline}
+\usepackage{paralist}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularray}
+\usepackage{enumitem}
+
+
+\setlength{\textfloatsep}{40pt plus 2.0pt minus 4.0pt}
+\setlength{\floatsep}{20.0pt plus 2.0pt minus 2.0pt}
+\setlength{\intextsep}{20.0pt plus 2.0pt minus 2.0pt}
+
+\usepackage{markdown}
+
+\usepackage{biblatex}
+\addbibresource{bibliography.bib}
+
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=MidnightBlue,
+  citecolor=MidnightBlue,
+  filecolor=MidnightBlue,
+  urlcolor=MidnightBlue,
+  pdftitle=Information Modelling Framework Manual,
+  pdfsubject=,
+  pdfkeywords=}
+
+\addto\extrasenglish{%
+\renewcommand{\chapterautorefname}{Chapter}
+\renewcommand{\sectionautorefname}{Section}
+\renewcommand{\subsectionautorefname}{Section}
+\renewcommand{\subsubsectionautorefname}{Section}
+}
+
+
+\makeatletter
+\newcommand\arraybslash{\let\\\@arraycr}
+\makeatother
+
+\usepackage[acronym]{glossaries}
+\makeglossaries
+\usepackage{myGlossary}
+
+%% use for terms in the IMF ontology
+\newcommand{\ow}[1]{\textsf{#1}}
+
+
+\let\openbox\relax
+\usepackage{amsthm}
+
+\theoremstyle{definition}
+\newtheorem*{axioms}{Axioms}
+\theoremstyle{plain}
+\newtheorem{example}{Example}[section]
+\def\exampleautorefname{Example}
+
+\newcommand\mybox[1]{\raisebox{.3em}{\fcolorbox[HTML]{000000}{#1}{\null}}}
+\newcommand\myboxt[1]{\texttt{\##1}~\mybox{#1}}
+
+
+
+%% draft
+\usepackage{datetime2}
+
+\definecolor{chromeyellow}{rgb}{1.0, 0.65, 0.0}
+\newcommand{\baifan}[1]{{\color{chromeyellow} [Baifan: #1]}}
+
+%\usepackage{lineno}
+%\renewcommand{\linenumberfont}{\normalfont\tiny\color{gray!30}}
+%\linenumbers
+%usepackage{draftwatermark}
+%\SetWatermarkText{DRAFT}
+%\SetWatermarkScale{1}
+%\SetWatermarkLightness{.97}
+
+\newcommand{\tocheck}[1]{\textcolor{red}{#1}}
+\newcommand{\comment}[1]{\textcolor{blue}{#1}}

@@ -1,0 +1,12 @@
+\begin{tikzpicture}
+
+  \tikzElementsBasic
+
+  \draw[oRelDir,emph] (b) to[bend left]  node[oRlab] {contains} (e.west);
+  \draw[oRelDir,emph] (c) to[bend right] node[oRlab] {contains} (e.east);
+  \draw[oRelDir,emph] (t) to[loop,out=220, in=320,looseness=5] node[oRlab,below] {contains} (t);
+
+  \draw[oRelDir,emph] (e) to [out=60 ,in=10 ,looseness=4] node[oRlab] {partOf}   (e);
+  \draw[oRelDir,emph] (e) to [out=170,in=120,looseness=4] node[oRlab] {containedIn}  (e);
+
+\end{tikzpicture}

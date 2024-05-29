@@ -1,0 +1,47 @@
+\begin{figure}
+  \centering
+  \begin{tabular}{ccc}
+    \begin{tabular}{rrrlpp}
+      Act & Spa & Imp & Colour code\\
+      \hline
+      1 &   &   & \myboxt{ffff00}\\
+        & 1 &   & \myboxt{ff00ff}\\
+        &   & 1 & \myboxt{00ffff}\\
+      \hline
+      1 & 1 &   & \myboxt{ff8080}\\
+      1 &   & 1 & \myboxt{80ff80}\\
+        & 1 & 1 & \myboxt{8080ff}\\
+      \hline
+      1 & 1 & 1 & \myboxt{aaaaaa}\\
+      \hline
+      2 & 1 &   & \myboxt{ffaa55}\\
+      2 & 1 & 1 & \myboxt{bfbf80}\\
+      2 &   & 1 & \myboxt{aaff55}\\
+      1 & 2 &   & \myboxt{ff55aa}\\
+      1 & 2 & 1 & \myboxt{bf80bf}\\
+      1 & 1 & 2 & \myboxt{80bfbf}\\
+      1 &   & 2 & \myboxt{55ffaa}\\
+        & 2 & 1 & \myboxt{aa55ff}\\
+        & 1 & 2 & \myboxt{55aaff}\\
+    \end{tabular}
+    &~~~~~~~&
+    \begin{tikzpicture}[baseline=(current bounding box.center)]
+      \begin{scope}[blend mode=multiply]
+        \pgfsetfillopacity{0.4}
+        \fill[cActivity]   ( 90:1.2) circle (1.5);
+        \fill[cSpace] (210:1.2) circle (1.5);
+        \fill[cImplementation]  (330:1.2) circle (1.5);
+        \fill[cActivity]   ( 90:1.2) circle (2);
+        \fill[cSpace] (210:1.2) circle (2);
+        \fill[cImplementation]  (330:1.2) circle (2);
+      \end{scope}
+      \node at ( 70:2.5)    {\ow{Activity}};
+      \node at ( 210:2.7)   {\ow{Space}};
+      \node at ( 330:2.7)   {\ow{Implementation}};
+    \end{tikzpicture}
+  \end{tabular}
+  \caption{\label{tbl:graphics-colour-sugggestions}Suggested colours for \ow{Aspect}s. The
+    columns \textsf{Act}-ivity, \textsf{Spa}-ce and
+    \textsf{Imp}-lementation indicate how many parts of this
+    colour is added to create the suggested colour.}
+\end{figure}

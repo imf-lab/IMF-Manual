@@ -1,0 +1,69 @@
+\begin{figure}
+  \centering
+\begin{tblr}{
+  colspec = {QQ[c]QQ[c]},
+  stretch = 0,
+  rowsep = 10pt,
+  column{2} = {leftsep=1pt,rightsep=2cm},
+  %hlines = {red5, 1pt},
+  %vlines = {red5, 1pt},
+}
+$\ow{connectedTo}(a,b)$  &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \node (a) at (0,0)  {$a$};
+  \node (b) at (2,0)  {$b$};
+  \draw (a) edge[connectedTo] (b);
+\end{tikzpicture}
+&
+$\ow{transfersTo}(a,b)$  &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \node (a) at (0,0)  {$a$};
+  \node (b) at (2,0)  {$b$};
+  \draw (a) edge[transfersTo] (b);
+\end{tikzpicture}
+\\
+$\ow{containedIn}(a,b)$  &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \node (a) at (0,0)  {$a$};
+  \node (b) at (0,2)  {$b$};
+  \draw (a) edge[containedIn] (b);
+\end{tikzpicture}
+&&
+\\
+$\ow{specializationOf}(a,b)$  &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \node (a) at (0,0)  {$a$};
+  \node (b) at (0,2)  {$b$};
+  \draw (a) edge[specializationOf] (b);
+\end{tikzpicture}
+&
+$\ow{fulfills}(a,b)$  &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \node (a) at (0,0)  {$a$};
+  \node (b) at (0,2)  {$b$};
+  \draw (a) edge[fulfills] (b);
+\end{tikzpicture}\\
+$\ow{proxy}(a,b)$  &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \node (a) at (0,0)  {$a$};
+  \node (b) at (1.5,1.5)  {$b$};
+  \draw (a) edge[proxy] (b);
+\end{tikzpicture}
+&
+$\ow{projection}(a,b)$  &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \node (a) at (0,0)  {$a$};
+  \node (b) at (1.5,-1.5)  {$b$};
+  \draw (a) edge[projection] (b);
+\end{tikzpicture}\\
+$\ow{equals}(a,b)$  &
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \node (a) at (0,0)  {$a$};
+  \node (b) at (1.5,1.5)  {$b$};
+  \draw (a) edge[equals] (b);
+\end{tikzpicture}
+&&
+\end{tblr}
+  \caption{All edge types, with their preferred orientation indicated.}
+  \label{fig:graphics-all-edges}
+\end{figure}

@@ -1,0 +1,19 @@
+\begin{tikzpicture}[
+  every label/.append style={font=\sffamily\scriptsize}
+  ]
+
+  \node[oClass]                               (a)  {Aspect};
+  \node[oClass, above right  = 1 and 4 of a]  (m)  {Modality};
+  \node[oClass, below = of m]                 (e)  {InformationDomain};
+  \node[oClass, below = of e]                 (i)  {Interest};
+
+  \draw[oRelDir,emph] (a) -- node[oRlab]{hasCharacteristic} (m);
+  \draw[oRelDir,emph] (a) -- node[oRlab]{hasCharacteristic} (e);
+  \draw[oRelDir,emph] (a) -- node[oRlab]{hasCharacteristic} (i);
+
+\end{tikzpicture}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End:

@@ -1,0 +1,38 @@
+\begin{tikzpicture}[
+  every label/.append style={font=\sffamily\scriptsize}
+  ]
+
+  \node[oClass]                                (e)  {Element};
+  \node[oClass, below left  = 1 and -.5 of e]  (ae) {AspectElement};
+  \node[oClass, left = 2 of ae]                (a)  {Aspect};
+
+  \node[oClass, below right = 1 and -.5 of e]   (ne) {NoAspectElement};
+  %\node[oInd, right = 2 of ne,label=below:none] (none) {};
+ 
+  \draw[oSpec] (ae) -- (e);
+  \draw[oSpec] (ne) -- (e);
+
+  \draw[oRelDir,emph] (ae) -- node[oRlab]{hasAspect} (a);
+  %\draw[oRelDir,emph] (ne) -- node[oRlab]{hasAspect} (none);
+
+  \draw[oRelDir,emph] (e) to [out=60 ,in=10 ,looseness=5] node[oRlab] {intraAspectRelation}   (e);
+  \draw[oRelDir,emph] (e) to [out=120 ,in=170 ,looseness=5] node[oRlab] {interAspectRelation}   (e);
+
+
+  % % aspect individuals: function, ...
+  % \node[oInd, below right = .5  and -3 of a,label=below:function]  (a1) {};
+  % \node[oInd, below right = 1   and -2 of a,label=below:location]  (a2) {};
+  % \node[oInd, below right = 1.5 and -1 of a,label=below:product]   (a3) {};
+  % \node[oInd, below right = 1   and  0 of a,label=below:installed] (a4) {};
+  
+  % \draw[oRel] (a) -- (a1);
+  % \draw[oRel] (a) -- (a2);
+  % \draw[oRel] (a) -- (a3);
+  % \draw[oRel] (a) -- (a4);
+
+\end{tikzpicture}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End:

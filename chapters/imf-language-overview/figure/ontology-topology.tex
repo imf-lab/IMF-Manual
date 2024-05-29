@@ -1,0 +1,14 @@
+\begin{tikzpicture}
+
+  \tikzElementsBasic
+
+  \draw[oRelDir,emph] (b) -- node[oRlab] {hasTerminal} (t);
+  \draw[oRelDir,emph] (t) -- node[oRlab] {hasConnector} (c);
+
+  \draw[oRelDir,emph] (e) to [out=60 ,in=10 ,looseness=4] node[oRlab] {adjacentTo}   (e);
+  \draw[oRelDir,emph] (e) to [out=170,in=120,looseness=4] node[oRlab] {connectedTo}  (e);
+
+  \draw[oRelDir,emph] (b) to [bend right] node[oRlab,below] {connectedThrough}  (c);
+
+\end{tikzpicture}
+
