@@ -1,5 +1,8 @@
 name: Build LaTeX document
-on: [push]
+on:
+  push:
+    branches:    
+      - master
 jobs:
   build_latex:
     runs-on: ubuntu-latest
@@ -10,3 +13,8 @@ jobs:
         uses: dante-ev/latex-action@latest
         with:
           root_file: main.tex
+      - name: Upload main.pdf
+      - uses: actions/upload-artifact@v4
+        with:
+          name: main.pdf
+          path: main.pdf
