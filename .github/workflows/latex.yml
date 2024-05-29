@@ -14,7 +14,7 @@ jobs:
         with:
           root_file: main.tex
       - name: Upload main.pdf
-      - uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4
         with:
           name: main.pdf
           path: main.pdf
